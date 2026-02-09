@@ -2107,54 +2107,34 @@ header {
 
 @media (max-width: 768px) {
     
-    /* 1. OCULTAR ELEMENTOS NO ESENCIALES */
-    /* Aquí listamos las clases que queremos que desaparezcan en el móvil */
+/* ========================
+   LIMPIEZA RADICAL PARA MÓVIL
+   (Ocultar Info, Stats y Protocolo)
+   ======================== */
+
+@media (max-width: 768px) {
     
-    .status-bar,           /* La barra de "System Online" */
-    .subtitle,             /* El texto debajo del título */
-    .tagline,              /* Los iconos de características */
-    .stats-container,      /* Las tarjetas de estadísticas (números) */
-    .instructions-panel,   /* El panel de "Cómo funciona" */
-    .footer-wave           /* La animación de ola del footer (consume recursos) */
-    {
+    /* 1. Oculta la descripción de texto del modo (La caja bajo los botones grandes) */
+    .mode-description {
         display: none !important;
     }
 
-    /* 2. COMPACTAR EL ENCABEZADO */
-    /* Reducimos los márgenes para que el buscador suba */
-    
-    header {
-        padding: 10px 0;
-        margin-bottom: 10px;
+    /* 2. Oculta los 4 cuadros de números (55 Dorks, 12 Categories, etc.) */
+    .stats-container {
+        display: none !important;
     }
 
-    .main-title {
-        font-size: 1.8rem; /* Título más pequeño */
-        margin-bottom: 5px;
+    /* 3. Oculta el "Operational Protocol" (Los pasos verdes 01, 02, 03, 04) */
+    .instructions-panel {
+        display: none !important;
     }
 
-    .pro-badge {
-        font-size: 0.9rem;
-        padding: 2px 6px;
-    }
-
-    /* 3. OPTIMIZAR EL BUSCADOR Y BOTONES */
-    /* Que ocupen menos espacio vertical */
-    
-    .input-section {
-        padding: 15px; /* Menos relleno */
-        margin-bottom: 20px;
-    }
-
-    .mode-switcher {
-        gap: 10px;
-        margin-bottom: 10px;
-    }
-
-    .mode-btn {
-        padding: 15px; /* Botones de modo más finos */
+    /* Ajuste extra: Reducir espacio que queda vacío */
+    .mode-switcher-container {
+        margin-bottom: 10px; /* Menos margen porque ya no hay texto abajo */
     }
 }
 }
+
 
 
