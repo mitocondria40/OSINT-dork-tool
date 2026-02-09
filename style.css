@@ -3,6 +3,7 @@
    Cyberpunk Professional Theme
    ======================== */
 
+
 :root {
     /* Colores principales */
     --primary: #00ff41;
@@ -2171,3 +2172,4 @@ div[class*="card"] {
         margin-bottom: 10px;
     }
 }
+
