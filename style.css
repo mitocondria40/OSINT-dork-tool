@@ -1866,7 +1866,7 @@ header {
    ======================== */
 .comet {
     position: fixed;
-    top: -50px; /* Empieza arriba de la pantalla */
+    top: -50px; 
     width: var(--comet-size);
     height: var(--comet-size);
     background: var(--primary);
@@ -1890,7 +1890,6 @@ header {
 
 @keyframes comet-fall {
     0% {
-        /* Ángulo de caída diagonal */
         transform: rotate(135deg) translateX(0);
         opacity: 0;
     }
@@ -1901,14 +1900,13 @@ header {
         opacity: 1;
     }
     100% {
-        /* Se desplaza diagonalmente hacia abajo a la izquierda */
         transform: rotate(135deg) translateX(-1500px);
         opacity: 0;
     }
 }
 
 /* ========================
-   RESPONSIVE
+   RESPONSIVE (General)
    ======================== */
 
 @media (max-width: 768px) {
@@ -2066,7 +2064,6 @@ header {
 
 /* ========================
    UTILITY HELPERS
-
    ======================== */
 
 .hidden {
@@ -2100,41 +2097,77 @@ header {
     .container {
         max-width: 100%;
     }
+}
 
-   /* ========================
-   OPTIMIZACIÓN MÓVIL (LIMPIEZA VISUAL)
+/* ========================
+   FIX FINAL: ESTILOS FORZADOS PARA BOTONES SIN CLASE
    ======================== */
 
-@media (max-width: 768px) {
-    
+.dorks-grid .card, 
+.dork-card,
+div[class*="card"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: flex-start;
+}
+
+#dorks-container button,
+.dorks-grid button,
+.card button {
+    background: rgba(0, 255, 65, 0.05) !important;
+    border: 1px solid var(--primary) !important;
+    color: var(--text-bright) !important;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0;
+}
+
+#dorks-container button:hover,
+.dorks-grid button:hover,
+.card button:hover {
+    background: var(--primary) !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
+    transform: translateY(-2px);
+}
+
+.dorks-grid h3,
+.card h3 {
+    width: 100%;
+    margin-bottom: 10px;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 5px;
+}
+
 /* ========================
    LIMPIEZA RADICAL PARA MÓVIL
    (Ocultar Info, Stats y Protocolo)
    ======================== */
 
 @media (max-width: 768px) {
-    
-    /* 1. Oculta la descripción de texto del modo (La caja bajo los botones grandes) */
+    /* 1. Oculta la descripción de texto del modo */
     .mode-description {
         display: none !important;
     }
 
-    /* 2. Oculta los 4 cuadros de números (55 Dorks, 12 Categories, etc.) */
+    /* 2. Oculta los 4 cuadros de números */
     .stats-container {
         display: none !important;
     }
 
-    /* 3. Oculta el "Operational Protocol" (Los pasos verdes 01, 02, 03, 04) */
+    /* 3. Oculta el "Operational Protocol" */
     .instructions-panel {
         display: none !important;
     }
 
-    /* Ajuste extra: Reducir espacio que queda vacío */
+    /* Ajuste extra: Reducir espacio */
     .mode-switcher-container {
-        margin-bottom: 10px; /* Menos margen porque ya no hay texto abajo */
+        margin-bottom: 10px;
     }
 }
-}
-
-
-
