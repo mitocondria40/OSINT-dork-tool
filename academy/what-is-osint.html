@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3469502188782084" crossorigin="anonymous"></script>
-
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MHWF85ZZ24"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -17,159 +16,326 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <link rel="stylesheet" href="../style.css">
     
     <style>
-        body { font-family: 'Share Tech Mono', monospace; }
-
-        .article-container { max-width: 800px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2; }
+        /* ARTICLE SPECIFIC STYLES */
+        .article-container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            position: relative; 
+            z-index: 2; 
+        }
         
-        .breadcrumb { 
-            color: #666; margin-bottom: 30px; font-size: 0.9rem; 
-            border-bottom: 1px dashed #333; padding-bottom: 10px; text-transform: uppercase; 
+        .breadcrumb {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 15px;
         }
-        .breadcrumb a { color: var(--neon-green, #00ff41); text-decoration: none; }
-
-        h1 { font-size: 2.5rem; color: #fff; margin-bottom: 10px; text-transform: uppercase; }
-        .meta-info { color: #888; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 20px; }
-        .meta-info strong { color: var(--neon-green, #00ff41); }
-
-        h2 { 
-            color: #fff; margin-top: 50px; margin-bottom: 20px; 
-            border-left: 4px solid var(--neon-green, #00ff41); padding-left: 15px; 
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        p { color: #ccc; margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; }
-
-        /* NOTA TÉCNICA */
-        .note-box {
-            background: #111;
-            border: 1px solid #333;
-            border-left: 3px solid #ffcc00; /* Amarillo advertencia */
-            padding: 20px;
-            margin: 30px 0;
-            color: #ddd;
-        }
-        .note-box strong { color: #ffcc00; display: block; margin-bottom: 5px; text-transform: uppercase; }
-
-        /* CTA BOX */
-        .cta-box {
-            background: #000;
-            border: 1px solid var(--neon-green, #00ff41);
-            padding: 30px;
-            text-align: center;
-            margin: 50px 0;
-            position: relative;
-        }
-        /* Decoración de esquinas en CTA */
-        .cta-box::before { content: ""; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid var(--neon-green, #00ff41); border-left: 2px solid var(--neon-green, #00ff41); }
-        .cta-box::after { content: ""; position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-bottom: 2px solid var(--neon-green, #00ff41); border-right: 2px solid var(--neon-green, #00ff41); }
-
-        .cta-btn {
-            display: inline-block;
-            background: transparent;
-            color: var(--neon-green, #00ff41);
-            border: 1px solid var(--neon-green, #00ff41);
-            padding: 12px 30px;
+        .breadcrumb a {
+            color: var(--primary);
             text-decoration: none;
-            font-weight: bold;
-            margin-top: 15px;
-            text-transform: uppercase;
             transition: 0.3s;
         }
-        .cta-btn:hover { background: var(--neon-green, #00ff41); color: #000; }
+        .breadcrumb a:hover { text-shadow: 0 0 5px var(--primary); }
 
-        ul { margin-left: 20px; color: #ccc; }
-        li { margin-bottom: 10px; }
-        li::marker { color: var(--neon-green, #00ff41); }
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--text-bright);
+            margin-bottom: 10px;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
 
-        /* Code snippets */
-        code { background: #000; border: 1px solid #333; padding: 2px 5px; color: #00ff41; font-family: 'Share Tech Mono', monospace; }
+        .meta-info {
+            color: var(--primary);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
 
+        h2 {
+            color: var(--text-bright);
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            background: linear-gradient(90deg, rgba(0,255,65,0.05), transparent);
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Technical Note Box */
+        .note-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--warning);
+            padding: 20px;
+            margin: 30px 0;
+            color: var(--text-dim);
+            position: relative;
+        }
+        .note-box strong { 
+            color: var(--warning); 
+            display: block; 
+            margin-bottom: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+
+        /* Call to Action Box */
+        .cta-box {
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            padding: 40px;
+            text-align: center;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,255,65,0.1) 0%, transparent 70%);
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary);
+            color: #000;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+        .cta-btn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+            transform: translateY(-2px);
+        }
+
+        ul, ol { margin-left: 20px; margin-bottom: 20px; color: var(--text-dim); }
+        li { margin-bottom: 10px; line-height: 1.6; }
+        li::marker { color: var(--primary); }
+        
+        strong { color: var(--text-bright); }
+
+        code { 
+            background: rgba(0,0,0,0.5); 
+            border: 1px solid var(--border); 
+            padding: 2px 6px; 
+            color: var(--secondary); 
+            font-family: 'JetBrains Mono', monospace; 
+            border-radius: 4px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+        .back-link:hover {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
     </style>
 </head>
 <body>
 
     <div class="grid-overlay"></div>
+    <div class="particles-bg"></div>
 
-    <div class="article-container">
-        <div class="breadcrumb">
-            <a href="../index.html">TOOL</a> / <a href="index.html">ACADEMY</a> / INTEL_BRIEFING
-        </div>
-
-        <article>
-            <h1>What is OSINT? The Ultimate Guide for Beginners</h1>
-            <div class="meta-info">
-                AUTHOR: <strong>DORKSEARCH_TEAM</strong> // READ_TIME: 8_MIN // ID: OSINT_001
+    <div class="container">
+        <header>
+            <div class="status-bar">
+                <span class="status-item"><i class="fas fa-circle pulse-green"></i> DATABASE: ACCESS_GRANTED</span>
+                <span class="status-item">ENCRYPTION: ON</span>
+                <span class="status-item">V.4.0</span>
             </div>
 
-            <div style="margin: 30px 0; text-align: center; border-top: 1px dashed #333; padding-top: 20px;">
-                <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">SPONSORED_INTEL:</p>
-                <script async="async" data-cfasync="false" src="https://pl28558446.effectivegatecpm.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
-                <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="glitch" data-text="ACADEMY">ACADEMY_<span class="highlight">DB</span></span>
+                </h1>
+                <p class="subtitle">
+                    <i class="fas fa-graduation-cap"></i> KNOWLEDGE BASE FOR SECURITY RESEARCHERS
+                </p>
             </div>
-
-            <p>In the digital age, information is currency. You don't need to hack secret servers to find valuable intelligence. Most data is hiding in plain sight. This is the world of <strong>Open Source Intelligence (OSINT)</strong>.</p>
-
-            <p>Whether you are a bug bounty hunter or a cybersecurity analyst, understanding OSINT is step one. Here is your briefing.</p>
-
-            <h2>>> Defining OSINT</h2>
-            <p><strong>OSINT</strong> refers to the practice of collecting and analyzing data accessible in publicly available sources. "Open Source" here means open to the public.</p>
-            <ul>
-                <li><strong>Surface Web:</strong> News, blogs, public directories.</li>
-                <li><strong>Social Media (SOCMINT):</strong> Twitter, LinkedIn, Facebook.</li>
-                <li><strong>Public Records:</strong> Government reports, patents.</li>
-                <li><strong>Meta Data:</strong> Geolocation from images, EXIF data.</li>
-            </ul>
-
-            <div class="note-box">
-                <strong>[!] CRITICAL DISTINCTION:</strong>
-                OSINT uses permission-based public data. Hacking involves breaking into systems to access private data. Know the difference.
-            </div>
-
-            <h2>>> The Intelligence Cycle</h2>
-            <p>Analysts follow a structured process:</p>
-            <ol>
-                <li><strong>Planning:</strong> Define the objective.</li>
-                <li><strong>Collection:</strong> Gather raw data.</li>
-                <li><strong>Processing:</strong> Organize and decode.</li>
-                <li><strong>Analysis:</strong> Connect dots to form conclusions.</li>
-                <li><strong>Dissemination:</strong> Report findings.</li>
-            </ol>
-
-            <h2>>> The Power of Google Dorking</h2>
-            <p>One of the most powerful subsets is <strong>Google Dorking</strong>. It involves using operators to filter results.</p>
             
-            <p>Standard search: <code>login page</code></p>
-            <p>OSINT search: <code>site:example.com inurl:admin filetype:php</code></p>
-            
-            <p>This query reveals hidden administrative panels by filtering for PHP files with "admin" in the URL.</p>
+            <nav class="main-nav">
+                <a href="../index.html" class="nav-item">
+                    <i class="fas fa-home"></i> TOOL
+                </a>
+                <a href="../meta-extractor.html" class="nav-item">
+                    <i class="fas fa-image"></i> EXIF_HUNTER
+                </a>
+                <a href="../emoji-crypt.html" class="nav-item">
+                    <i class="fas fa-lock"></i> EMOJI_CRYPT
+                </a>
+                <a href="index.html" class="nav-item active">
+                    <i class="fas fa-graduation-cap"></i> ACADEMY
+                </a>
+            </nav>
+        </header>
 
-            <div class="cta-box">
-                <h3>🚀 INITIATE_DORKING_SEQUENCE</h3>
-                <p>We have built a tool to automate this process. Do not memorize commands.</p>
-                <a href="../index.html" class="cta-btn">ACCESS GENERATOR</a>
+        <main>
+            <div class="article-container">
+                <div class="breadcrumb">
+                    <i class="fas fa-terminal"></i> <a href="../index.html">ROOT</a> / <a href="index.html">ACADEMY</a> / OSINT_GUIDE_001
+                </div>
+
+                <article>
+                    <h1>What is OSINT? The Ultimate Guide for Beginners</h1>
+                    <div class="meta-info">
+                        <span><i class="fas fa-user"></i> AUTHOR: DORKSEARCH_TEAM</span>
+                        <span><i class="fas fa-clock"></i> READ_TIME: 8_MIN</span>
+                        <span><i class="fas fa-tag"></i> BEGINNER_GUIDE</span>
+                    </div>
+
+                    <div class="ad-container" style="margin: 30px 0;">
+                        <p class="ad-label"><i class="fas fa-ad"></i> SPONSORED_INTELLIGENCE</p>
+                        <script async="async" data-cfasync="false" src="https://pl28558446.effectivegatecpm.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
+                        <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
+                    </div>
+
+                    <p>In the digital age, information is currency. You don't need to hack secret servers to find valuable intelligence. Most data is hiding in plain sight. This is the world of <strong>Open Source Intelligence (OSINT)</strong>.</p>
+
+                    <p>Whether you are a bug bounty hunter or a cybersecurity analyst, understanding OSINT is step one. Here is your briefing.</p>
+
+                    <h2>>> Defining OSINT</h2>
+                    <p><strong>OSINT</strong> refers to the practice of collecting and analyzing data accessible in publicly available sources. "Open Source" here means open to the public.</p>
+                    <ul>
+                        <li><strong>Surface Web:</strong> News, blogs, public directories.</li>
+                        <li><strong>Social Media (SOCMINT):</strong> Twitter, LinkedIn, Facebook.</li>
+                        <li><strong>Public Records:</strong> Government reports, patents.</li>
+                        <li><strong>Meta Data:</strong> Geolocation from images, EXIF data.</li>
+                    </ul>
+
+                    <div class="note-box">
+                        <strong><i class="fas fa-exclamation-triangle"></i> CRITICAL DISTINCTION:</strong>
+                        OSINT uses permission-based public data. Hacking involves breaking into systems to access private data. Know the difference.
+                    </div>
+
+                    <h2>>> The Intelligence Cycle</h2>
+                    <p>Analysts follow a structured process:</p>
+                    <ol>
+                        <li><strong>Planning:</strong> Define the objective.</li>
+                        <li><strong>Collection:</strong> Gather raw data.</li>
+                        <li><strong>Processing:</strong> Organize and decode.</li>
+                        <li><strong>Analysis:</strong> Connect dots to form conclusions.</li>
+                        <li><strong>Dissemination:</strong> Report findings.</li>
+                    </ol>
+
+                    <h2>>> The Power of Google Dorking</h2>
+                    <p>One of the most powerful subsets is <strong>Google Dorking</strong>. It involves using operators to filter results.</p>
+                    
+                    <p>Standard search: <code>login page</code></p>
+                    <p>OSINT search: <code>site:example.com inurl:admin filetype:php</code></p>
+                    
+                    <p>This query reveals hidden administrative panels by filtering for PHP files with "admin" in the URL.</p>
+
+                    <div class="cta-box">
+                        <h3 style="color:var(--text-bright); font-size:1.5rem; margin-bottom:10px;">🚀 INITIATE_DORKING_SEQUENCE</h3>
+                        <p>We have built a tool to automate this process. Do not memorize commands.</p>
+                        <a href="../index.html" class="cta-btn">
+                            <i class="fas fa-bolt"></i> ACCESS GENERATOR
+                        </a>
+                    </div>
+
+                    <h2>>> Ethical Boundaries</h2>
+                    <p>Ethical OSINT has strict protocols:</p>
+                    <ul>
+                        <li><strong>Passive vs. Active:</strong> OSINT is passive. Port scanning is active (attacking).</li>
+                        <li><strong>Privacy:</strong> Respect GDPR/CCPA. Do not dox individuals.</li>
+                        <li><strong>Scope:</strong> Stay within bug bounty program policies.</li>
+                    </ul>
+
+                    <p>Start small. Use our tool to explore your own digital footprint.</p>
+                </article>
+
+                <div style="text-align: center;">
+                    <a href="index.html" class="back-link">&lt; RETURN TO ACADEMY INDEX</a>
+                </div>
             </div>
+        </main>
 
-            <h2>>> Ethical Boundaries</h2>
-            <p>Ethical OSINT has strict protocols:</p>
-            <ul>
-                <li><strong>Passive vs. Active:</strong> OSINT is passive. Port scanning is active (attacking).</li>
-                <li><strong>Privacy:</strong> Respect GDPR/CCPA. Do not dox individuals.</li>
-                <li><strong>Scope:</strong> Stay within bug bounty program policies.</li>
-            </ul>
-
-            <p>Start small. Use our tool to explore your own digital footprint.</p>
-        </article>
-
-        <footer style="margin-top: 50px; text-align: center; font-size: 0.9rem; color: #666; border-top: 1px solid #333; padding-top: 20px;">
-            <p><a href="index.html" style="color:#888; text-decoration:none;">&lt; RETURN_TO_BASE</a></p>
+        <footer class="site-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-container">
+                <div class="footer-section about">
+                    <h3><i class="fas fa-info-circle"></i> ABOUT THE PROJECT</h3>
+                    <p>DorkSearch PRO is an <strong>Open Source</strong> platform dedicated to democratizing <strong>Cybersecurity</strong> and <strong>OSINT</strong> tools.</p>
+                </div>
+                
+                <div class="footer-section links">
+                    <h3><i class="fas fa-link"></i> QUICK LINKS</h3>
+                    <ul>
+                        <li><a href="../index.html"><i class="fas fa-chevron-right"></i> Main Tool</a></li>
+                        <li><a href="../meta-extractor.html"><i class="fas fa-chevron-right"></i> EXIF Hunter</a></li>
+                        <li><a href="../privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 DorkSearch PRO | Developed with <i class="fas fa-heart pulse"></i></p>
+            </div>
         </footer>
+
     </div>
 
+    <script>
+        function createComet() {
+            const container = document.body;
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            const duration = 4 + Math.random() * 6;
+            comet.style.left = Math.random() * 100 + '%';
+            comet.style.setProperty('--comet-duration', duration + 's');
+            comet.style.setProperty('--comet-size', (2 + Math.random() * 3) + 'px');
+            comet.style.setProperty('--tail-length', (80 + Math.random() * 150) + 'px');
+            container.appendChild(comet);
+            setTimeout(() => comet.remove(), duration * 1000);
+        }
+        function spawnComets() {
+            createComet();
+            setTimeout(spawnComets, 1500 + Math.random() * 3000);
+        }
+        spawnComets();
+    </script>
 
 </body>
 </html>
-
