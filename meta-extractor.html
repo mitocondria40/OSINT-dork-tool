@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3469502188782084" crossorigin="anonymous"></script>
-
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MHWF85ZZ24"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -22,346 +21,477 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* ESTILOS DE LA HERRAMIENTA */
-        .upload-area {
-            border: 2px dashed #333;
-            background: rgba(0, 255, 65, 0.02);
-            padding: 40px;
-            text-align: center;
-            margin: 20px 0;
-            cursor: pointer;
-            transition: 0.3s;
-            position: relative;
-        }
-        .upload-area:hover {
-            border-color: var(--neon-green, #00ff41);
-            background: rgba(0, 255, 65, 0.05);
-        }
-        .upload-icon { font-size: 3em; color: var(--neon-green, #00ff41); margin-bottom: 15px; }
+        /* ESTILOS ESPECÍFICOS PARA EL EXTRACTOR */
         
+        .upload-card {
+            border: 2px dashed var(--border);
+            background: rgba(0, 255, 65, 0.02);
+            padding: 50px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-card:hover {
+            border-color: var(--primary);
+            background: rgba(0, 255, 65, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .upload-card:hover .upload-icon {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .upload-text h3 {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: var(--text-bright);
+        }
+
         #file-input { display: none; }
 
-        .results-container { display: none; margin-top: 30px; animation: fadeIn 0.5s ease; }
-        
-        .data-grid {
+        /* Contenedor de Resultados */
+        .results-wrapper {
+            display: none; /* Oculto por defecto */
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .analysis-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 30px;
             margin-bottom: 30px;
         }
-        @media (max-width: 768px) { .data-grid { grid-template-columns: 1fr; } }
 
-        .image-preview img {
+        /* Panel de Imagen */
+        .preview-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .preview-panel img {
             max-width: 100%;
-            border: 1px solid #333;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            max-height: 400px;
+            border: 1px solid var(--primary-dark);
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
         }
 
-        .meta-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
+        /* Panel de Datos (Terminal Style) */
+        .data-terminal {
+            background: #000;
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--primary);
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .meta-table td {
-            padding: 10px;
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
             border-bottom: 1px solid #222;
+            padding-bottom: 8px;
         }
-        .meta-table td:first-child { color: #888; width: 40%; }
-        .meta-table td:last-child { color: var(--neon-green, #00ff41); font-weight: bold; }
 
+        .data-label { color: var(--text-dim); }
+        .data-value { color: var(--primary); font-weight: bold; text-align: right; }
+
+        /* Mapa Personalizado (Dark Mode Hack) */
         #map {
-            height: 300px;
+            height: 400px;
             width: 100%;
-            border: 1px solid var(--neon-green, #00ff41);
+            border: 2px solid var(--border);
             margin-top: 20px;
-            display: none; 
+            display: none;
+            filter: grayscale(100%) invert(100%) contrast(90%); /* HACK PARA MAPA OSCURO */
         }
         
-        .no-gps-alert {
-            color: #ff0041;
-            border: 1px solid #ff0041;
-            padding: 10px;
-            display: none;
-            margin-top: 20px;
+        /* Ajuste para que los marcadores del mapa no se inviertan de color */
+        .leaflet-marker-icon, 
+        .leaflet-marker-shadow, 
+        .leaflet-popup {
+            filter: grayscale(0%) invert(100%) contrast(100%) !important;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+            width: 100%;
             text-align: center;
         }
 
-        .deep-dive {
-            margin-top: 80px;
-            border-top: 1px solid #333;
-            padding-top: 40px;
-            color: #ccc;
-        }
-        .deep-dive h2 {
-            color: #fff;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--neon-green);
-            padding-left: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .deep-dive h3 {
-            color: var(--neon-green);
-            margin-top: 25px;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-        .deep-dive p { margin-bottom: 15px; line-height: 1.7; font-size: 1rem; }
-        .deep-dive ul { margin-left: 20px; margin-bottom: 20px; }
-        .deep-dive li { margin-bottom: 10px; }
-        .deep-dive code { background: #111; color: var(--neon-green); padding: 2px 5px; }
+        .status-success { background: rgba(0, 255, 65, 0.1); color: var(--primary); border: 1px solid var(--primary); }
+        .status-error { background: rgba(255, 0, 102, 0.1); color: var(--accent); border: 1px solid var(--accent); }
+        .status-wait { background: rgba(255, 204, 0, 0.1); color: var(--warning); border: 1px solid var(--warning); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 900px) {
+            .analysis-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
     <div class="grid-overlay"></div>
+    <div class="particles-bg"></div>
 
     <div class="container">
         <header>
             <div class="status-bar">
-                <span>MODULE: EXIF_HUNTER</span>
-                <span>SYSTEM: ONLINE</span>
-                <span>V.2.3</span>
+                <span class="status-item"><i class="fas fa-circle pulse-green"></i> SYSTEM: ONLINE</span>
+                <span class="status-item">MODULE: EXIF_HUNTER</span>
+                <span class="status-item">V.2.3 PRO</span>
             </div>
 
-            <h1>DORK<span class="highlight">SEARCH</span>PRO</h1>
-            <p class="subtitle">MODULE: EXIF METADATA & GPS EXTRACTOR</p>
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="glitch" data-text="METADATA">META<span class="highlight">DATA</span></span>
+                </h1>
+                
+                <p class="subtitle">
+                    <i class="fas fa-search-location"></i> GPS FORENSIC EXTRACTOR
+                    <span class="separator">●</span>
+                    <i class="fas fa-camera"></i> EXIF ANALYSIS TOOL
+                </p>
+            </div>
             
             <nav class="main-nav">
-                <a href="index.html">[ BACK_TO_SEARCH ]</a>
-                <a href="meta-extractor.html" class="active">[ EXIF_TOOL ]</a>
-                <a href="emoji-crypt.html">[ EMOJI_CRYPT ]</a> 
-                <a href="academy/index.html">[ ACADEMY_DB ]</a>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i> TOOL
+                </a>
+                <a href="meta-extractor.html" class="nav-item active">
+                    <i class="fas fa-image"></i> EXIF_HUNTER
+                </a>
+                <a href="emoji-crypt.html" class="nav-item">
+                    <i class="fas fa-lock"></i> EMOJI_CRYPT
+                </a>
+                <a href="academy/index.html" class="nav-item">
+                    <i class="fas fa-graduation-cap"></i> ACADEMY
+                </a>
             </nav>
         </header>
 
         <main>
             <section class="instructions-panel">
-                <div class="panel-header">/// FORENSIC ANALYSIS PROTOCOL ///</div>
-                <p style="padding: 15px; color: #ccc;">
-                    Upload any image (JPG/JPEG) to extract hidden metadata.
-                    <br><i class="fas fa-shield-alt"></i> <strong>PRIVACY:</strong> Processing is done locally in your browser. Images are NEVER uploaded to our servers.
-                </p>
+                <div class="panel-header">
+                    <i class="fas fa-terminal"></i> FORENSIC PROTOCOL
+                </div>
+                <div class="info-grid">
+                    <p style="color: var(--text-dim);">
+                        Upload any raw image (JPG/JPEG) to extract hidden layers.
+                        <br>
+                        <i class="fas fa-shield-alt" style="color:var(--primary)"></i> <strong>PRIVACY GUARD:</strong> All processing is done 100% locally in your browser (Client-Side). No images are uploaded to any server.
+                    </p>
+                </div>
             </section>
 
-            <div class="upload-area" id="drop-zone">
+            <div class="upload-card" id="drop-zone">
                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                <h3>DRAG & DROP IMAGE HERE</h3>
-                <p>or click to browse files</p>
+                <div class="upload-text">
+                    <h3>DRAG & DROP TARGET IMAGE</h3>
+                    <p class="label-hint">Supported formats: JPG, JPEG (Originals preferred)</p>
+                </div>
                 <input type="file" id="file-input" accept="image/jpeg, image/jpg">
+                <button class="scan-btn primary" style="max-width: 200px; margin: 20px auto 0;">
+                    <i class="fas fa-folder-open"></i> BROWSE FILES
+                </button>
             </div>
 
-            <div style="margin: 30px 0; text-align: center; padding-top: 10px;">
-                <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">ANALYSIS_TOOLS:</p>
+            <div class="ad-container">
+                <p class="ad-label"><i class="fas fa-ad"></i> SPONSORED_INTELLIGENCE</p>
                 <script async="async" data-cfasync="false" src="https://pl28558446.effectivegatecpm.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
                 <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
             </div>
-            <div class="results-container" id="results">
-                <div class="panel-header">/// ANALYSIS REPORT ///</div>
-                
-                <div class="data-grid">
-                    <div class="image-preview">
-                        <img id="preview-img" src="" alt="Analyzed Image">
+
+            <div class="results-wrapper" id="results">
+                <div class="section-header">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>ANALYSIS REPORT</h3>
+                </div>
+
+                <div class="analysis-grid">
+                    <div class="preview-panel">
+                        <img id="preview-img" src="" alt="Analyzed Target">
                     </div>
                     
-                    <div class="meta-data">
-                        <table class="meta-table">
-                            <tr><td>CAMERA MODEL:</td><td id="cam-model">---</td></tr>
-                            <tr><td>DATE TAKEN:</td><td id="date-taken">---</td></tr>
-                            <tr><td>SOFTWARE:</td><td id="software">---</td></tr>
-                            <tr><td>EXPOSURE:</td><td id="exposure">---</td></tr>
-                            <tr><td>ISO:</td><td id="iso">---</td></tr>
-                            <tr><td>GPS STATUS:</td><td id="gps-status">WAITING...</td></tr>
-                        </table>
+                    <div class="data-terminal">
+                        <div class="panel-header" style="border:none; padding:0; margin-bottom:15px; font-size:0.9rem;">
+                            >> EXIF_DATA_STREAM
+                        </div>
+                        
+                        <div class="data-row">
+                            <span class="data-label">DEVICE MODEL:</span>
+                            <span class="data-value" id="cam-model">Analyzing...</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">TIMESTAMP:</span>
+                            <span class="data-value" id="date-taken">---</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">SOFTWARE/OS:</span>
+                            <span class="data-value" id="software">---</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">EXPOSURE:</span>
+                            <span class="data-value" id="exposure">---</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">ISO SPEED:</span>
+                            <span class="data-value" id="iso">---</span>
+                        </div>
+                        
+                        <div id="gps-status-box" class="status-badge status-wait">
+                            WAITING FOR GPS DATA...
+                        </div>
                     </div>
                 </div>
 
                 <div id="map"></div>
-                <div id="no-gps" class="no-gps-alert">
-                    <i class="fas fa-exclamation-triangle"></i> NO GPS DATA FOUND IN THIS IMAGE
-                </div>
             </div>
 
-            <section class="deep-dive">
-                <h2>>> TECHNICAL BRIEFING: THE HIDDEN DATA LAYER</h2>
-                <p>Every time you take a photo with a smartphone or a modern digital camera, the device records more than just light and color. It embeds a hidden layer of data known as <strong>Metadata</strong>. This information acts as a digital fingerprint, providing forensic analysts with details about the device, the settings, and most critically, the physical location where the image was captured.</p>
+            <section class="info-section">
+                <h2><i class="fas fa-book"></i> TECHNICAL BRIEFING</h2>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="fas fa-fingerprint"></i>
+                            <h3>What is EXIF?</h3>
+                        </div>
+                        <p><strong>EXIF (Exchangeable Image File Format)</strong> is a hidden layer of metadata embedded in photos. It acts as a digital fingerprint, recording device info, settings, and location.</p>
+                    </div>
 
-                <h3>// What is EXIF Data?</h3>
-                <p><strong>EXIF (Exchangeable Image File Format)</strong> is the standard that specifies the formats for images, sound, and ancillary tags used by digital cameras and smartphones. While useful for photographers to organize their libraries (sorting by date, camera model, or lens type), it poses a significant privacy risk when shared inadvertently.</p>
-                <p>Key data points often found in EXIF tags include:</p>
-                <ul>
-                    <li><strong>Device Info:</strong> Manufacturer, Model (e.g., iPhone 15 Pro, Canon R5).</li>
-                    <li><strong>Exposure Settings:</strong> Shutter speed, Aperture (f-stop), ISO speed.</li>
-                    <li><strong>DateTime Original:</strong> The exact second the photo was taken.</li>
-                    <li><strong>GPS Coordinates:</strong> Latitude, Longitude, and Altitude.</li>
-                </ul>
+                    <div class="info-card highlight">
+                        <div class="info-card-header">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h3>The GPS Threat</h3>
+                        </div>
+                        <p>If you upload a raw photo from your phone to a blog or forum, you might be broadcasting your exact <strong>GPS coordinates</strong> (Home, Work, School). Most major social networks strip this, but email and file sharing do not.</p>
+                    </div>
 
-                <h2>>> THE PRIVACY THREAT: GEOLOCATION LEAKS</h2>
-                <p>The most dangerous component of metadata is the <strong>GPS Geotag</strong>. If you take a photo at your home or workplace and upload it directly to a blog, forum, or share it via email, you are essentially broadcasting your exact coordinates to the world.</p>
-
-                <h3>// OSINT & "Cyberstalking"</h3>
-                <p>In the field of <strong>OSINT (Open Source Intelligence)</strong>, metadata extraction is one of the first steps in verifying the authenticity of an image or locating a target. Security researchers use tools like this <em>EXIF Hunter</em> to validate leaks or track events.</p>
-                <p>However, bad actors use the same technology for "Cyberstalking." By analyzing photos posted on personal blogs or unstripped messaging apps, they can build a pattern of life, determining where a person lives, works, or goes to school.</p>
-
-                <h3>// Do Social Media Sites Remove EXIF?</h3>
-                <p>Most major platforms (Facebook, Instagram, Twitter/X, WhatsApp) automatically strip metadata (sanitize the file) during the upload process to protect user privacy. However, many other platforms do not:</p>
-                <ul>
-                    <li>Email attachments (often keep full metadata).</li>
-                    <li>Cloud storage links (Dropbox, Google Drive).</li>
-                    <li>Direct file transfers (AirDrop, Bluetooth).</li>
-                    <li>Many web forums and smaller social networks.</li>
-                </ul>
-
-                <h2>>> DEFENSIVE PROTOCOL: HOW TO SCRUB METADATA</h2>
-                <p>To maintain operational security (OPSEC), you should sanitize images before public release.</p>
-                <ol>
-                    <li><strong>Windows:</strong> Right-click the image > Properties > Details > "Remove Properties and Personal Information".</li>
-                    <li><strong>macOS:</strong> Open in Preview > Tools > Show Inspector > GPS > Remove Location Info.</li>
-                    <li><strong>Mobile:</strong> Use specialized apps like "Metapho" (iOS) or "Photo Metadata Remover" (Android).</li>
-                    <li><strong>DorkSearch PRO:</strong> Use this viewer to verify that your scrubbing was successful before sharing.</li>
-                </ol>
-
-                <p style="margin-top: 30px; padding: 20px; border: 1px solid #333; background: #000;">
-                    <strong>DISCLAIMER:</strong> DorkSearch PRO processes all images client-side. Your photos are never uploaded to our servers. This tool is provided for educational purposes to help users understand their digital footprint and improve their privacy.
-                </p>
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="fas fa-user-shield"></i>
+                            <h3>Defensive OPSEC</h3>
+                        </div>
+                        <ul class="warning-list">
+                            <li><i class="fas fa-check"></i> Always scrub metadata before sharing publicly.</li>
+                            <li><i class="fas fa-check"></i> Turn off "Location Tags" in your camera app.</li>
+                            <li><i class="fas fa-check"></i> Use tools like this to verify your files.</li>
+                        </ul>
+                    </div>
+                </div>
             </section>
-
         </main>
-        
+
         <footer class="site-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-container">
+                <div class="footer-section about">
+                    <h3><i class="fas fa-info-circle"></i> ABOUT THE PROJECT</h3>
+                    <p>DorkSearch PRO is an <strong>Open Source</strong> platform dedicated to democratizing <strong>Cybersecurity</strong> and <strong>OSINT</strong> tools.</p>
+                </div>
+                
+                <div class="footer-section links">
+                    <h3><i class="fas fa-link"></i> QUICK LINKS</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Main Tool</a></li>
+                        <li><a href="meta-extractor.html"><i class="fas fa-chevron-right"></i> EXIF Hunter</a></li>
+                        <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
             <div class="footer-bottom">
-                <p>© 2026 DorkSearch PRO | <a href="privacy.html">PRIVACY_PROTOCOL</a></p>
+                <p>© 2026 DorkSearch PRO | Developed with <i class="fas fa-heart pulse"></i></p>
             </div>
         </footer>
     </div>
 
     <script>
-        // Referencias al DOM
+        function createComet() {
+            const container = document.body;
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            const duration = 4 + Math.random() * 6;
+            comet.style.left = Math.random() * 100 + '%';
+            comet.style.setProperty('--comet-duration', duration + 's');
+            comet.style.setProperty('--comet-size', (2 + Math.random() * 3) + 'px');
+            comet.style.setProperty('--tail-length', (80 + Math.random() * 150) + 'px');
+            container.appendChild(comet);
+            setTimeout(() => comet.remove(), duration * 1000);
+        }
+        function spawnComets() {
+            createComet();
+            setTimeout(spawnComets, 1500 + Math.random() * 3000);
+        }
+        spawnComets();
+    </script>
+
+    <script>
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
         const results = document.getElementById('results');
         const previewImg = document.getElementById('preview-img');
+        const gpsBadge = document.getElementById('gps-status-box');
         let map = null;
 
+        // Event Listeners
         dropZone.addEventListener('click', () => fileInput.click());
 
         fileInput.addEventListener('change', function(e) {
-            if(e.target.files.length > 0) {
-                handleFile(e.target.files[0]);
-            }
+            if(e.target.files.length > 0) handleFile(e.target.files[0]);
         });
 
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = '#fff';
+            dropZone.style.borderColor = 'var(--primary)';
+            dropZone.style.background = 'rgba(0, 255, 65, 0.1)';
         });
+
         dropZone.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = '#333';
+            dropZone.style.borderColor = 'var(--border)';
+            dropZone.style.background = 'rgba(0, 255, 65, 0.02)';
         });
+
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = '#333';
-            if(e.dataTransfer.files.length > 0) {
-                handleFile(e.dataTransfer.files[0]);
-            }
+            dropZone.style.borderColor = 'var(--border)';
+            dropZone.style.background = 'rgba(0, 255, 65, 0.02)';
+            if(e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
         });
+
+        function resetUI() {
+            // Limpiar datos visuales anteriores
+            document.getElementById('cam-model').innerText = "Analyzing...";
+            document.getElementById('date-taken').innerText = "---";
+            document.getElementById('software').innerText = "---";
+            document.getElementById('iso').innerText = "---";
+            document.getElementById('exposure').innerText = "---";
+            
+            // Resetear estado del GPS
+            gpsBadge.className = "status-badge status-wait";
+            gpsBadge.innerText = "DECODING METADATA...";
+            
+            // Ocultar mapa si existía
+            document.getElementById('map').style.display = 'none';
+        }
 
         function handleFile(file) {
             if (!file || !file.type.match(/image\/jpe?g/i)) {
-                alert('ERROR: Please upload a valid JPG/JPEG image.');
+                alert('ERROR: Invalid File Format. Please upload a JPG/JPEG image.');
                 return;
             }
 
-            document.getElementById('gps-status').innerText = "LOADING IMAGE...";
-            document.getElementById('gps-status').style.color = "#ccc";
+            // 1. Resetear UI
+            resetUI();
+            
+            // Mostrar contenedor
             results.style.display = 'block';
+            
+            // Scroll suave
+            setTimeout(() => {
+                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
 
             const reader = new FileReader();
-
             reader.onload = function(e) {
+                // 2. IMPORTANTE: Limpiar caché EXIF de la imagen anterior
+                previewImg.exifdata = null; 
+                previewImg.src = ""; // Vaciar src momentáneamente
+                
                 previewImg.onload = function() {
                     analyzeExif(previewImg);
                 };
+                
                 previewImg.src = e.target.result;
             };
-
             reader.readAsDataURL(file);
         }
 
         function analyzeExif(imgElement) {
-            imgElement.exifdata = null; 
-
-            document.getElementById('gps-status').innerText = "ANALYZING BINARY...";
-            
-            if (typeof EXIF === 'undefined') {
-                document.getElementById('gps-status').innerText = "ERROR: LIB NOT LOADED";
-                document.getElementById('gps-status').style.color = "red";
-                console.error("EXIF library not found");
-                return;
-            }
-
             try {
                 EXIF.getData(imgElement, function() {
-                    
+                    // Extract Data
                     const make = EXIF.getTag(this, "Make") || "";
-                    const model = EXIF.getTag(this, "Model") || "Unknown";
-                    const date = EXIF.getTag(this, "DateTime") || "Unknown Date";
-                    const software = EXIF.getTag(this, "Software") || "Unknown";
+                    const model = EXIF.getTag(this, "Model") || "Unknown Device";
+                    const date = EXIF.getTag(this, "DateTime") || "N/A";
+                    const software = EXIF.getTag(this, "Software") || "N/A";
                     const iso = EXIF.getTag(this, "ISOSpeedRatings") || "---";
                     
                     let exposure = "---";
                     const expTime = EXIF.getTag(this, "ExposureTime");
-                    if(expTime) {
-                        exposure = (expTime >= 1) ? expTime : "1/" + Math.round(1/expTime);
-                    }
+                    if(expTime) exposure = (expTime >= 1) ? expTime : "1/" + Math.round(1/expTime);
 
+                    // Update DOM
                     document.getElementById('cam-model').innerText = `${make} ${model}`;
                     document.getElementById('date-taken').innerText = date;
                     document.getElementById('software').innerText = software;
                     document.getElementById('iso').innerText = iso;
                     document.getElementById('exposure').innerText = exposure;
 
+                    // GPS Logic
                     const latArr = EXIF.getTag(this, "GPSLatitude");
                     const lonArr = EXIF.getTag(this, "GPSLongitude");
                     const latRef = EXIF.getTag(this, "GPSLatitudeRef");
                     const lonRef = EXIF.getTag(this, "GPSLongitudeRef");
 
-                    document.getElementById('map').style.display = 'none';
-                    document.getElementById('no-gps').style.display = 'none';
-
                     if (latArr && lonArr && latRef && lonRef) {
-                        const decimalLat = convertDMSToDD(latArr, latRef);
-                        const decimalLon = convertDMSToDD(lonArr, lonRef);
+                        const lat = convertDMSToDD(latArr, latRef);
+                        const lon = convertDMSToDD(lonArr, lonRef);
                         
-                        document.getElementById('gps-status').innerText = `LOCKED: ${decimalLat.toFixed(5)}, ${decimalLon.toFixed(5)}`;
-                        document.getElementById('gps-status').style.color = "#00ff41";
+                        gpsBadge.className = "status-badge status-success";
+                        gpsBadge.innerText = `GPS LOCKED: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
                         
-                        showMap(decimalLat, decimalLon);
+                        showMap(lat, lon);
                     } else {
-                        document.getElementById('gps-status').innerText = "DATA EXTRACTED (NO GPS)";
-                        document.getElementById('gps-status').style.color = "#ffb700"; 
-                        document.getElementById('no-gps').style.display = 'block';
+                        gpsBadge.className = "status-badge status-error";
+                        gpsBadge.innerText = "NO GPS DATA FOUND IN IMAGE";
                     }
                 });
             } catch (error) {
                 console.error(error);
-                document.getElementById('gps-status').innerText = "FATAL ERROR";
+                gpsBadge.innerText = "FATAL ERROR PARSING EXIF";
+                gpsBadge.className = "status-badge status-error";
             }
         }
 
         function convertDMSToDD(dms, ref) {
             let dd = dms[0] + dms[1]/60 + dms[2]/3600;
-            if (ref == "S" || ref == "W") {
-                dd = dd * -1;
-            }
+            if (ref == "S" || ref == "W") dd = dd * -1;
             return dd;
         }
 
@@ -372,6 +502,7 @@
             if (map !== null) {
                 map.off();
                 map.remove();
+                map = null;
             }
 
             map = L.map('map').setView([lat, lon], 13);
@@ -381,8 +512,10 @@
             }).addTo(map);
 
             L.marker([lat, lon]).addTo(map)
-                .bindPopup('TARGET LOCATION')
+                .bindPopup(`<strong>TARGET LOCATION</strong><br>${lat.toFixed(5)}, ${lon.toFixed(5)}`)
                 .openPopup();
+                
+            setTimeout(() => { map.invalidateSize(); }, 200);
         }
     </script>
 </body>
