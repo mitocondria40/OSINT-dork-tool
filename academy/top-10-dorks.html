@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3469502188782084" crossorigin="anonymous"></script>
-
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MHWF85ZZ24"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -17,180 +16,369 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <link rel="stylesheet" href="../style.css">
 
     <style>
-        body { font-family: 'Share Tech Mono', monospace; }
-        
-        .article-container { max-width: 800px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2; }
-        
-        /* Breadcrumb Tech */
-        .breadcrumb { 
-            color: #666; margin-bottom: 30px; font-size: 0.9rem; 
-            border-bottom: 1px dashed #333; padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
+        /* ESTILOS ESPECÍFICOS DEL ARTÍCULO */
+        .article-container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            position: relative; 
+            z-index: 2; 
         }
-        .breadcrumb a { color: var(--neon-green, #00ff41); text-decoration: none; }
+        
+        .breadcrumb {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 15px;
+        }
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .breadcrumb a:hover { text-shadow: 0 0 5px var(--primary); }
 
-        /* Títulos */
-        h1 { font-size: 2.5rem; color: #fff; margin-bottom: 10px; letter-spacing: -1px; text-transform: uppercase; }
-        .meta-info { color: var(--neon-green, #00ff41); border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 40px; font-size: 0.9rem; letter-spacing: 1px; }
-
-        h2 { 
-            color: #fff; margin-top: 50px; margin-bottom: 20px; 
-            border-left: 4px solid var(--neon-green, #00ff41); padding-left: 15px; 
-            text-transform: uppercase; letter-spacing: 1px; 
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--text-bright);
+            margin-bottom: 10px;
+            line-height: 1.2;
+            text-transform: uppercase;
         }
 
-        p { color: #ccc; margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; }
+        .meta-info {
+            color: var(--primary);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-        /* DORK CARD (Terminal Style) */
+        /* Títulos de sección */
+        h2 {
+            color: var(--text-bright);
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            background: linear-gradient(90deg, rgba(0,255,65,0.05), transparent);
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        code {
+            background: rgba(0,0,0,0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: var(--secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        /* Tarjeta de Dork (Payload Card) */
         .dork-card {
-            background: #000;
-            border: 1px solid #333;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
             padding: 20px;
-            margin: 20px 0;
-            border-radius: 0; /* Bordes cuadrados */
+            margin: 20px 0 30px 0;
             position: relative;
-            border-left: 3px solid var(--neon-green, #00ff41);
+            border-left: 3px solid var(--primary);
+            transition: var(--transition);
         }
+
+        .dork-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+            transform: translateX(5px);
+        }
+
         .dork-card code {
-            color: var(--neon-green, #00ff41);
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1.1rem;
+            background: transparent;
+            padding: 0;
+            color: var(--primary);
+            font-size: 1rem;
             display: block;
             word-break: break-all;
         }
-        .dork-card::before {
-            content: ">> QUERY_PAYLOAD:";
-            display: block;
-            font-size: 0.7rem;
-            color: #666;
-            margin-bottom: 5px;
-        }
 
-        /* CTA BOX */
-        .cta-box {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px solid var(--neon-green, #00ff41);
-            padding: 30px;
-            text-align: center;
-            margin-top: 50px;
-        }
-        .cta-btn {
-            display: inline-block;
-            background: var(--neon-green, #00ff41);
+        .dork-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary);
             color: #000;
-            padding: 10px 25px;
-            text-decoration: none;
+            font-size: 0.65rem;
+            padding: 2px 8px;
             font-weight: bold;
-            margin-top: 15px;
-            text-transform: uppercase;
+            font-family: 'Share Tech Mono', monospace;
         }
-        .cta-btn:hover { box-shadow: 0 0 15px var(--neon-green, #00ff41); }
 
+        /* Call to Action Box */
+        .cta-box {
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            padding: 40px;
+            text-align: center;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,255,65,0.1) 0%, transparent 70%);
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary);
+            color: #000;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+        .back-link:hover {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
     </style>
 </head>
 <body>
 
     <div class="grid-overlay"></div>
+    <div class="particles-bg"></div>
 
-    <div class="article-container">
-        <div class="breadcrumb">
-            <a href="../index.html">TOOL</a> / <a href="index.html">ACADEMY</a> / TOP_10_DORKS
-        </div>
-
-        <article>
-            <h1>Top 10 Google Dorks for Bug Bounty Hunters</h1>
-            <div class="meta-info">
-                <i class="fas fa-sync-alt"></i> UPDATED: 2026.01.05 // CLASSIFICATION: TECHNICAL_GUIDE
+    <div class="container">
+        <header>
+            <div class="status-bar">
+                <span class="status-item"><i class="fas fa-circle pulse-green"></i> DATABASE: ACCESS_GRANTED</span>
+                <span class="status-item">ENCRYPTION: ON</span>
+                <span class="status-item">V.4.0</span>
             </div>
 
-            <div style="margin: 30px 0; text-align: center; border-top: 1px dashed #333; padding-top: 20px;">
-                <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">SPONSORED_INTEL:</p>
-                <script async="async" data-cfasync="false" src="https://pl28558446.effectivegatecpm.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
-                <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="glitch" data-text="ACADEMY">ACADEMY_<span class="highlight">DB</span></span>
+                </h1>
+                <p class="subtitle">
+                    <i class="fas fa-graduation-cap"></i> KNOWLEDGE BASE FOR SECURITY RESEARCHERS
+                </p>
             </div>
+            
+            <nav class="main-nav">
+                <a href="../index.html" class="nav-item">
+                    <i class="fas fa-home"></i> TOOL
+                </a>
+                <a href="../meta-extractor.html" class="nav-item">
+                    <i class="fas fa-image"></i> EXIF_HUNTER
+                </a>
+                <a href="../emoji-crypt.html" class="nav-item">
+                    <i class="fas fa-lock"></i> EMOJI_CRYPT
+                </a>
+                <a href="index.html" class="nav-item active">
+                    <i class="fas fa-graduation-cap"></i> ACADEMY
+                </a>
+            </nav>
+        </header>
 
-            <p>Google Dorking is a staple in the reconnaissance phase of any Bug Bounty program. Before you launch Burp Suite or Nmap, you should always check what the target has already leaked to the public index.</p>
-            <p>Below is the classified list of the most effective queries for identifying low-hanging vulnerabilities.</p>
+        <main>
+            <div class="article-container">
+                <div class="breadcrumb">
+                    <i class="fas fa-terminal"></i> <a href="../index.html">ROOT</a> / <a href="index.html">ACADEMY</a> / TOP_10_DORKS
+                </div>
 
-            <h2>1. Exposed Environment Files</h2>
-            <p>The <code>.env</code> file is the holy grail. It often contains API keys, database credentials, and debug settings.</p>
-            <div class="dork-card">
-                <code>filetype:env "DB_PASSWORD" site:example.com</code>
+                <article>
+                    <h1>Top 10 Google Dorks for Bug Bounty Hunters</h1>
+                    <div class="meta-info">
+                        <span><i class="fas fa-clock"></i> 2026.01.05</span>
+                        <span><i class="fas fa-folder"></i> TECHNICAL_GUIDE</span>
+                        <span><i class="fas fa-user"></i> ADMIN</span>
+                    </div>
+
+                    <div class="ad-container" style="margin: 30px 0;">
+                        <p class="ad-label"><i class="fas fa-ad"></i> SPONSORED_INTELLIGENCE</p>
+                        <script async="async" data-cfasync="false" src="https://pl28558446.effectivegatecpm.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
+                        <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
+                    </div>
+
+                    <p>Google Dorking is a staple in the reconnaissance phase of any Bug Bounty program. Before you launch Burp Suite or Nmap, you should always check what the target has already leaked to the public index.</p>
+                    <p>Below is the classified list of the most effective queries for identifying low-hanging vulnerabilities.</p>
+
+                    <h2>1. Exposed Environment Files</h2>
+                    <p>The <code>.env</code> file is the holy grail. It often contains API keys, database credentials, and debug settings.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_01</span>
+                        <code>filetype:env "DB_PASSWORD" site:example.com</code>
+                    </div>
+
+                    <h2>2. Public Log Files</h2>
+                    <p>Log files can leak user data, internal IP addresses, and system pathways.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_02</span>
+                        <code>filetype:log OR filetype:txt intext:"password" site:example.com</code>
+                    </div>
+
+                    <h2>3. SQL Database Dumps</h2>
+                    <p>Developers sometimes leave backups in public directories containing schema and data.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_03</span>
+                        <code>filetype:sql intext:"INSERT INTO" site:example.com</code>
+                    </div>
+
+                    <h2>4. Directory Listing</h2>
+                    <p>Misconfigured servers listing all files, allowing file system browsing.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_04</span>
+                        <code>intitle:"index of /" "parent directory" site:example.com</code>
+                    </div>
+
+                    <h2>5. Config Files (XML/CONF)</h2>
+                    <p>Reveal server versions and internal network architecture.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_05</span>
+                        <code>filetype:xml OR filetype:conf intext:password site:example.com</code>
+                    </div>
+
+                    <h2>6. Exposed Git Repositories</h2>
+                    <p>Finding a <code>.git</code> folder exposes the entire version history.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_06</span>
+                        <code>inurl:/.git site:example.com</code>
+                    </div>
+
+                    <h2>7. WordPress User Enumeration</h2>
+                    <p>Find hidden WordPress login pages or author archives.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_07</span>
+                        <code>inurl:wp-content OR inurl:wp-includes site:example.com</code>
+                    </div>
+
+                    <h2>8. PHP Errors</h2>
+                    <p>Forcing Google to find crashing pages reveals absolute paths.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_08</span>
+                        <code>filetype:php intext:"fatal error" site:example.com</code>
+                    </div>
+
+                    <h2>9. Public S3 Buckets</h2>
+                    <p>Google indexes open Amazon S3 buckets containing sensitive data.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_09</span>
+                        <code>site:s3.amazonaws.com "company-name"</code>
+                    </div>
+
+                    <h2>10. Login Portals</h2>
+                    <p>Finding the admin panel is step one to testing authentication.</p>
+                    <div class="dork-card">
+                        <span class="dork-label">PAYLOAD_10</span>
+                        <code>inurl:login OR inurl:admin OR intitle:"login" site:example.com</code>
+                    </div>
+
+                    <div class="cta-box">
+                        <h3 style="color:var(--text-bright); font-size:1.5rem; margin-bottom:10px;">⚡ AUTOMATION_REQUIRED</h3>
+                        <p>Do not type manually. Use our automated generator to build these queries instantly.</p>
+                        <a href="../index.html" class="cta-btn">
+                            <i class="fas fa-rocket"></i> LAUNCH GENERATOR
+                        </a>
+                    </div>
+
+                </article>
+                
+                <div style="text-align: center;">
+                    <a href="index.html" class="back-link">&lt; RETURN TO ACADEMY INDEX</a>
+                </div>
             </div>
+        </main>
 
-            <h2>2. Public Log Files</h2>
-            <p>Log files can leak user data, internal IP addresses, and system pathways.</p>
-            <div class="dork-card">
-                <code>filetype:log OR filetype:txt intext:"password" site:example.com</code>
+        <footer class="site-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-container">
+                <div class="footer-section about">
+                    <h3><i class="fas fa-info-circle"></i> ABOUT THE PROJECT</h3>
+                    <p>DorkSearch PRO is an <strong>Open Source</strong> platform dedicated to democratizing <strong>Cybersecurity</strong> and <strong>OSINT</strong> tools.</p>
+                </div>
+                
+                <div class="footer-section links">
+                    <h3><i class="fas fa-link"></i> QUICK LINKS</h3>
+                    <ul>
+                        <li><a href="../index.html"><i class="fas fa-chevron-right"></i> Main Tool</a></li>
+                        <li><a href="../meta-extractor.html"><i class="fas fa-chevron-right"></i> EXIF Hunter</a></li>
+                        <li><a href="../privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
             </div>
-
-            <h2>3. SQL Database Dumps</h2>
-            <p>Developers sometimes leave backups in public directories containing schema and data.</p>
-            <div class="dork-card">
-                <code>filetype:sql intext:"INSERT INTO" site:example.com</code>
+            
+            <div class="footer-bottom">
+                <p>© 2026 DorkSearch PRO | Developed with <i class="fas fa-heart pulse"></i></p>
             </div>
-
-            <h2>4. Directory Listing</h2>
-            <p>Misconfigured servers listing all files, allowing file system browsing.</p>
-            <div class="dork-card">
-                <code>intitle:"index of /" "parent directory" site:example.com</code>
-            </div>
-
-            <h2>5. Config Files (XML/CONF)</h2>
-            <p>Reveal server versions and internal network architecture.</p>
-            <div class="dork-card">
-                <code>filetype:xml OR filetype:conf intext:password site:example.com</code>
-            </div>
-
-            <h2>6. Exposed Git Repositories</h2>
-            <p>Finding a <code>.git</code> folder exposes the entire version history.</p>
-            <div class="dork-card">
-                <code>inurl:/.git site:example.com</code>
-            </div>
-
-            <h2>7. WordPress User Enumeration</h2>
-            <p>Find hidden WordPress login pages or author archives.</p>
-            <div class="dork-card">
-                <code>inurl:wp-content OR inurl:wp-includes site:example.com</code>
-            </div>
-
-            <h2>8. PHP Errors</h2>
-            <p>Forcing Google to find crashing pages reveals absolute paths.</p>
-            <div class="dork-card">
-                <code>filetype:php intext:"fatal error" site:example.com</code>
-            </div>
-
-            <h2>9. Public S3 Buckets</h2>
-            <p>Google indexes open Amazon S3 buckets containing sensitive data.</p>
-            <div class="dork-card">
-                <code>site:s3.amazonaws.com "company-name"</code>
-            </div>
-
-            <h2>10. Login Portals</h2>
-            <p>Finding the admin panel is step one to testing authentication.</p>
-            <div class="dork-card">
-                <code>inurl:login OR inurl:admin OR intitle:"login" site:example.com</code>
-            </div>
-
-            <div class="cta-box">
-                <h3>⚡ AUTOMATION_REQUIRED</h3>
-                <p>Do not type manually. Use the automated generator.</p>
-                <a href="../index.html" class="cta-btn">[ LAUNCH_GENERATOR ]</a>
-            </div>
-
-        </article>
-        
-        <footer style="margin-top: 50px; text-align: center; font-size: 0.9rem; color: #666; border-top: 1px solid #333; padding-top: 20px;">
-            <p><a href="index.html" style="color:#888; text-decoration:none;">&lt; RETURN_TO_BASE</a></p>
         </footer>
+
     </div>
 
+    <script>
+        function createComet() {
+            const container = document.body;
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            const duration = 4 + Math.random() * 6;
+            comet.style.left = Math.random() * 100 + '%';
+            comet.style.setProperty('--comet-duration', duration + 's');
+            comet.style.setProperty('--comet-size', (2 + Math.random() * 3) + 'px');
+            comet.style.setProperty('--tail-length', (80 + Math.random() * 150) + 'px');
+            container.appendChild(comet);
+            setTimeout(() => comet.remove(), duration * 1000);
+        }
+        function spawnComets() {
+            createComet();
+            setTimeout(spawnComets, 1500 + Math.random() * 3000);
+        }
+        spawnComets();
+    </script>
 
 </body>
 </html>
-
