@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3469502188782084" crossorigin="anonymous"></script>
-
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MHWF85ZZ24"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -14,635 +13,759 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacker Glossary: 100+ Cyber Security Terms | DorkSearch PRO</title>
-    <meta name="description" content="Comprehensive dictionary of cybersecurity, OSINT, and hacking terminology. Over 100 terms defined for researchers and bug bounty hunters.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <link rel="stylesheet" href="../style.css">
 
     <style>
-        body { font-family: 'Share Tech Mono', monospace; }
-        .article-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2; }
-        
-        .breadcrumb { 
-            color: #666; margin-bottom: 30px; font-size: 0.9rem; 
-            border-bottom: 1px dashed #333; padding-bottom: 10px; text-transform: uppercase; 
+        /* GLOSSARY SPECIFIC STYLES */
+        .article-container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            position: relative; 
+            z-index: 2; 
         }
-        .breadcrumb a { color: var(--neon-green, #00ff41); text-decoration: none; }
-
-        h1 { font-size: 2.5rem; color: #fff; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
-        .subtitle-gl { text-align: center; color: #888; margin-bottom: 40px; }
-
-        /* Estilo de las Tarjetas de Términos */
-        .term-card {
-            background: #0a0a0a;
-            border-left: 3px solid #333;
-            padding: 20px;
-            margin-bottom: 20px;
+        
+        .breadcrumb {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 15px;
+        }
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
             transition: 0.3s;
         }
+        .breadcrumb a:hover { text-shadow: 0 0 5px var(--primary); }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--text-bright);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .subtitle-gl { 
+            text-align: center; 
+            color: var(--text-dim); 
+            margin-bottom: 40px; 
+            font-size: 1.1rem;
+        }
+
+        /* Term Cards */
+        .term-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--border);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            position: relative;
+        }
+
         .term-card:hover {
-            border-left-color: var(--neon-green, #00ff41);
-            background: #111;
+            border-left-color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
             transform: translateX(5px);
         }
         
         .term-title {
-            color: var(--neon-green, #00ff41);
-            font-size: 1.2rem;
-            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
-        .term-title i { font-size: 0.8em; opacity: 0.7; }
 
-        .term-def { color: #ccc; line-height: 1.6; margin-bottom: 10px; font-size: 0.95rem; }
+        .term-def { 
+            color: var(--text); 
+            line-height: 1.6; 
+            margin-bottom: 15px; 
+            font-size: 1rem; 
+        }
         
         .tag {
             display: inline-block;
-            background: #222;
-            color: #888;
-            font-size: 0.7rem;
-            padding: 2px 6px;
-            border-radius: 2px;
-            margin-right: 5px;
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--primary);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
             text-transform: uppercase;
+            border: 1px solid rgba(0, 255, 65, 0.2);
         }
 
-        /* Buscador falso (Estético) */
+        /* Fake Search Bar */
         .search-bar-fake {
             width: 100%;
-            background: #000;
-            border: 1px solid var(--neon-green, #00ff41);
+            background: var(--bg-input);
+            border: 1px solid var(--primary);
             padding: 15px;
-            color: #fff;
+            color: var(--primary);
             margin-bottom: 40px;
-            font-family: inherit;
+            font-family: 'JetBrains Mono', monospace;
             text-align: center;
-            opacity: 0.8;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.1);
         }
         
         /* Letter Separator */
         .letter-sep {
-            color: #fff;
-            font-size: 2rem;
-            margin: 40px 0 20px 0;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
+            color: var(--text-bright);
+            font-size: 2.5rem;
+            margin: 60px 0 30px 0;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+        .back-link:hover {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
         }
     </style>
 </head>
 <body>
 
     <div class="grid-overlay"></div>
-
-    <div class="article-container">
-        <div class="breadcrumb">
-            <a href="../index.html">TOOL</a> / <a href="index.html">ACADEMY</a> / GLOSSARY_DB
-        </div>
-
-        <h1>>> TERMINAL_GLOSSARY_V.2</h1>
-        <p class="subtitle-gl">The definitive database of 100+ cybersecurity definitions.</p>
-        
-        <div style="margin: 30px 0; text-align: center; border-top: 1px dashed #333; padding-top: 20px;">
-            <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">SPONSORED_INTEL:</p>
-            <script async="async" data-cfasync="false" src="https://pl28558446.effectivegatecpm.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
-            <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
-        </div>
-
-        <div class="search-bar-fake">
-            > SYSTEM_STATUS: ALL RECORDS LOADED [104 TERMS]
-        </div>
-
-        <h2 class="letter-sep">A</h2>
-        
-        <div class="term-card">
-            <div class="term-title">Advanced Persistent Threat (APT)</div>
-            <div class="term-def">A stealthy threat actor, typically a nation-state or state-sponsored group, which gains unauthorized access to a computer network and remains undetected for an extended period.</div>
-            <div class="tag">#THREAT_INTEL</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Adware</div>
-            <div class="term-def">Software that automatically displays or downloads advertising material (often unwanted) when a user is online.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Air Gap</div>
-            <div class="term-def">A network security measure employed on one or more computers to ensure that a secure computer network is physically isolated from unsecured networks, such as the public Internet or an unsecured local area network.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">AES (Advanced Encryption Standard)</div>
-            <div class="term-def">A symmetric block cipher chosen by the U.S. government to protect classified information. It is implemented in software and hardware throughout the world to encrypt sensitive data.</div>
-            <div class="tag">#CRYPTOGRAPHY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">API (Application Programming Interface)</div>
-            <div class="term-def">A set of functions and procedures allowing the creation of applications that access the features or data of an operating system, application, or other service. Often a vector for attack if unsecured.</div>
-            <div class="tag">#DEV</div>
-        </div>
-
-        <h2 class="letter-sep">B</h2>
-
-        <div class="term-card">
-            <div class="term-title">Backdoor</div>
-            <div class="term-def">A means to access a computer system or encrypted data that bypasses the system's customary security mechanisms.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Black Hat</div>
-            <div class="term-def">A hacker who violates computer security for little reason beyond maliciousness or for personal gain.</div>
-            <div class="tag">#CULTURE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Blue Team</div>
-            <div class="term-def">A group of individuals who perform an analysis of information systems to ensure security, identify security flaws, verify the effectiveness of each security measure, and make certain all security measures will continue to be effective after implementation.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Botnet</div>
-            <div class="term-def">A network of private computers infected with malicious software and controlled as a group without the owners' knowledge, often used to send spam or launch DDoS attacks.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Brute Force Attack</div>
-            <div class="term-def">A trial and error method used by application programs to decode encrypted data such as passwords or Data Encryption Standard (DES) keys, through exhaustive effort (using brute force) rather than employing intellectual strategies.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Bug Bounty</div>
-            <div class="term-def">A deal offered by many websites, organizations and software developers by which individuals can receive recognition and compensation for reporting bugs, especially those pertaining to security exploits and vulnerabilities.</div>
-            <div class="tag">#RESEARCH</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Burp Suite</div>
-            <div class="term-def">A leading software for web application security testing. It acts as a proxy, allowing interception and modification of traffic between browser and server.</div>
-            <div class="tag">#TOOL</div>
-        </div>
-
-        <h2 class="letter-sep">C</h2>
-
-        <div class="term-card">
-            <div class="term-title">C2 (Command and Control)</div>
-            <div class="term-def">A server used by an attacker to maintain communications with compromised systems within a target network.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Cipher</div>
-            <div class="term-def">An algorithm for performing encryption or decryption—a series of well-defined steps that can be followed as a procedure.</div>
-            <div class="tag">#CRYPTOGRAPHY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Clickjacking</div>
-            <div class="term-def">A malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on.</div>
-            <div class="tag">#WEB_VULN</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Cookie</div>
-            <div class="term-def">A small piece of data sent from a website and stored on the user's computer by the user's web browser while the user is browsing. Can be stolen to hijack sessions.</div>
-            <div class="tag">#WEB</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Credential Stuffing</div>
-            <div class="term-def">A type of cyberattack where stolen account credentials typically consisting of lists of usernames and/or email addresses and the corresponding passwords are used to gain unauthorized access to user accounts.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">CSRF (Cross-Site Request Forgery)</div>
-            <div class="term-def">An attack that forces an end user to execute unwanted actions on a web application in which they're currently authenticated.</div>
-            <div class="tag">#WEB_VULN</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">CVE (Common Vulnerabilities and Exposures)</div>
-            <div class="term-def">A list of publicly disclosed computer security flaws. When someone refers to a CVE, they mean a security flaw that has been assigned a CVE ID number.</div>
-            <div class="tag">#STANDARD</div>
-        </div>
-
-        <h2 class="letter-sep">D</h2>
-
-        <div class="term-card">
-            <div class="term-title">Dark Web</div>
-            <div class="term-def">A part of the internet that isn't indexed by search engines. You've likely heard of it as a hotbed of criminal activity — and it is. Researchers often use Tor to access it.</div>
-            <div class="tag">#NETWORK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">DDoS (Distributed Denial of Service)</div>
-            <div class="term-def">A malicious attempt to disrupt the normal traffic of a targeted server, service or network by overwhelming the target or its surrounding infrastructure with a flood of Internet traffic.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Deep Web</div>
-            <div class="term-def">The part of the World Wide Web that is not indexed by standard web search-engines. This includes email inboxes, banking portals, and private databases.</div>
-            <div class="tag">#NETWORK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Dictionary Attack</div>
-            <div class="term-def">An attempted illegal entry to a computer system that uses a dictionary headword list to generate possible passwords.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Dorking (Google Hacking)</div>
-            <div class="term-def">The use of advanced search operators within a search engine to locate specific strings of text or security vulnerabilities that are not readily visible.</div>
-            <div class="tag">#OSINT</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Doxing</div>
-            <div class="term-def">The act of publicly revealing previously private personal information about an individual or organization, usually through the Internet.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <h2 class="letter-sep">E</h2>
-
-        <div class="term-card">
-            <div class="term-title">Encryption</div>
-            <div class="term-def">The process of encoding a message or information in such a way that only authorized parties can access it and those who are not authorized cannot.</div>
-            <div class="tag">#CRYPTOGRAPHY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Exif Data</div>
-            <div class="term-def">Metadata embedded within image files that can contain information about the camera, settings, and sometimes GPS location coordinates.</div>
-            <div class="tag">#OSINT</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Exploit</div>
-            <div class="term-def">Code that takes advantage of a software vulnerability or security flaw. It allows an attacker to remotely access a network or gain administrator privileges.</div>
-            <div class="tag">#OFFENSIVE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Exploit Kit</div>
-            <div class="term-def">A toolkit used to automate the exploitation of client-side vulnerabilities, usually targeting browsers and plugins.</div>
-            <div class="tag">#TOOL</div>
-        </div>
-
-        <h2 class="letter-sep">F</h2>
-
-        <div class="term-card">
-            <div class="term-title">Firewall</div>
-            <div class="term-def">A network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Forensics</div>
-            <div class="term-def">The application of investigation and analysis techniques to gather and preserve evidence from a particular computing device in a way that is suitable for presentation in a court of law.</div>
-            <div class="tag">#INVESTIGATION</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Fuzzing</div>
-            <div class="term-def">A quality assurance technique used to discover coding errors and security loopholes in software, operating systems or networks by inputting massive amounts of random data, called fuzz, to the system in an attempt to make it crash.</div>
-            <div class="tag">#TESTING</div>
-        </div>
-
-        <h2 class="letter-sep">G</h2>
-
-        <div class="term-card">
-            <div class="term-title">GDPR</div>
-            <div class="term-def">General Data Protection Regulation. A legal framework that sets guidelines for the collection and processing of personal information from individuals who live in the European Union (EU).</div>
-            <div class="tag">#LEGAL</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Grey Hat</div>
-            <div class="term-def">A computer security expert who may sometimes violate laws or typical ethical standards, but does not have the malicious intent characteristic of a black hat hacker.</div>
-            <div class="tag">#CULTURE</div>
-        </div>
-
-        <h2 class="letter-sep">H</h2>
-
-        <div class="term-card">
-            <div class="term-title">Hash</div>
-            <div class="term-def">A mathematical function that converts a numerical input value into another compressed numerical value. Essential for verifying data integrity and storing passwords securely (e.g., MD5, SHA-256).</div>
-            <div class="tag">#CRYPTOGRAPHY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Honeypot</div>
-            <div class="term-def">A decoy computer system for trapping hackers or tracking new hacking methods. Honeypots are designed to purposely engage and deceive hackers and identify malicious activities.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">HTTPS</div>
-            <div class="term-def">Hypertext Transfer Protocol Secure. An extension of the Hypertext Transfer Protocol (HTTP). It is used for secure communication over a computer network, and is widely used on the Internet.</div>
-            <div class="tag">#PROTOCOL</div>
-        </div>
-
-        <h2 class="letter-sep">I</h2>
-
-        <div class="term-card">
-            <div class="term-title">IDS (Intrusion Detection System)</div>
-            <div class="term-def">A device or software application that monitors a network or system for malicious activity or policy violations.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">IoT (Internet of Things)</div>
-            <div class="term-def">The interconnection via the Internet of computing devices embedded in everyday objects, enabling them to send and receive data. Often insecure.</div>
-            <div class="tag">#HARDWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">IP Address</div>
-            <div class="term-def">A unique string of numbers separated by periods that identifies each computer using the Internet Protocol to communicate over a network.</div>
-            <div class="tag">#NETWORK</div>
-        </div>
-
-        <h2 class="letter-sep">K</h2>
-
-        <div class="term-card">
-            <div class="term-title">Keylogger</div>
-            <div class="term-def">A type of surveillance software (considered to be either software or spyware) that has the capability to record every keystroke you make to a log file, usually encrypted.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <h2 class="letter-sep">L</h2>
-
-        <div class="term-card">
-            <div class="term-title">Logic Bomb</div>
-            <div class="term-def">A piece of code intentionally inserted into a software system that will set off a malicious function when specified conditions are met.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <h2 class="letter-sep">M</h2>
-
-        <div class="term-card">
-            <div class="term-title">Malware</div>
-            <div class="term-def">Software that is specifically designed to disrupt, damage, or gain unauthorized access to a computer system. Includes viruses, worms, trojans, ransomware, etc.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Man-in-the-Middle (MitM)</div>
-            <div class="term-def">An attack where the attacker secretly relays and possibly alters the communication between two parties who believe they are directly communicating with each other.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Metadata</div>
-            <div class="term-def">Data that provides information about other data. For example, the author, date created, date modified, and file size are examples of document metadata.</div>
-            <div class="tag">#OSINT</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Multi-Factor Authentication (MFA)</div>
-            <div class="term-def">An electronic authentication method in which a user is granted access to a website or application only after successfully presenting two or more pieces of evidence (or factors).</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <h2 class="letter-sep">O</h2>
-
-        <div class="term-card">
-            <div class="term-title">Open Port</div>
-            <div class="term-def">A TCP or UDP port number that is configured to accept packets. In contrast, a port which rejects connections or ignores all packets directed at it is a closed port.</div>
-            <div class="tag">#NETWORK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">OSINT (Open Source Intelligence)</div>
-            <div class="term-def">Data collected from publicly available sources to be used in an intelligence context. Sources include social media, public records, and the surface web.</div>
-            <div class="tag">#OSINT</div>
-        </div>
-
-        <h2 class="letter-sep">P</h2>
-
-        <div class="term-card">
-            <div class="term-title">Packet Sniffer</div>
-            <div class="term-def">Software or hardware used to collect data traveling over a network. Can be used legitimately for troubleshooting or maliciously to capture data.</div>
-            <div class="tag">#TOOL</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Patch</div>
-            <div class="term-def">A set of changes to a computer program or its supporting data designed to update, fix, or improve it. This includes fixing security vulnerabilities and other bugs.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Payload</div>
-            <div class="term-def">The component of a computer virus or exploit which executes a malicious activity. It is the "warhead" delivered by the exploit.</div>
-            <div class="tag">#OFFENSIVE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Penetration Testing (Pentesting)</div>
-            <div class="term-def">The practice of testing a computer system, network or web application to find security vulnerabilities that an attacker could exploit.</div>
-            <div class="tag">#OFFENSIVE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Phishing</div>
-            <div class="term-def">The fraudulent attempt to obtain sensitive information such as usernames, passwords and credit card details by disguising oneself as a trustworthy entity in an electronic communication.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">PII (Personally Identifiable Information)</div>
-            <div class="term-def">Information that can be used on its own or with other information to identify, contact, or locate a single person, or to identify an individual in context.</div>
-            <div class="tag">#PRIVACY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Proxy</div>
-            <div class="term-def">A server that acts as an intermediary for requests from clients seeking resources from other servers. Used to hide IP addresses or bypass filters.</div>
-            <div class="tag">#NETWORK</div>
-        </div>
-
-        <h2 class="letter-sep">R</h2>
-
-        <div class="term-card">
-            <div class="term-title">Ransomware</div>
-            <div class="term-def">A type of malware that threatens to publish the victim's data or perpetually block access to it unless a ransom is paid.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">RAT (Remote Access Trojan)</div>
-            <div class="term-def">A malware program that includes a back door for administrative control over the target computer.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Red Team</div>
-            <div class="term-def">An independent group that challenges an organization to improve its effectiveness by assuming an adversarial role or point of view.</div>
-            <div class="tag">#OFFENSIVE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Rootkit</div>
-            <div class="term-def">A collection of computer software, typically malicious, designed to enable access to a computer or an area of its software that is not otherwise allowed (for example, to an unauthorized user) and often masks its existence or the existence of other software.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <h2 class="letter-sep">S</h2>
-
-        <div class="term-card">
-            <div class="term-title">Salt</div>
-            <div class="term-def">Random data that is used as an additional input to a one-way function that hashes data, a password or passphrase. It protects against dictionary attacks and rainbow table attacks.</div>
-            <div class="tag">#CRYPTOGRAPHY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Sandbox</div>
-            <div class="term-def">A security mechanism for separating running programs, usually in an effort to mitigate system failures or software vulnerabilities from spreading.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Script Kiddie</div>
-            <div class="term-def">A derogatory term for a person who uses existing computer scripts or code to hack into computers, lacking the expertise to write their own.</div>
-            <div class="tag">#CULTURE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Shodan</div>
-            <div class="term-def">A search engine that lets the user find specific types of computers (webcams, routers, servers, etc.) connected to the internet using a variety of filters.</div>
-            <div class="tag">#TOOL</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Social Engineering</div>
-            <div class="term-def">The psychological manipulation of people into performing actions or divulging confidential information.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Spear Phishing</div>
-            <div class="term-def">An email or electronic communications scam targeted towards a specific individual, organization or business.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Spoofing</div>
-            <div class="term-def">A situation in which a person or program successfully identifies as another by falsifying data, to gain an illegitimate advantage.</div>
-            <div class="tag">#ATTACK</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">SQL Injection (SQLi)</div>
-            <div class="term-def">A code injection technique used to attack data-driven applications, in which malicious SQL statements are inserted into an entry field for execution.</div>
-            <div class="tag">#WEB_VULN</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">SSH (Secure Shell)</div>
-            <div class="term-def">A cryptographic network protocol for operating network services securely over an unsecured network.</div>
-            <div class="tag">#PROTOCOL</div>
-        </div>
-
-        <h2 class="letter-sep">T</h2>
-
-        <div class="term-card">
-            <div class="term-title">Tor (The Onion Router)</div>
-            <div class="term-def">Free and open-source software for enabling anonymous communication. It directs Internet traffic through a free, worldwide, volunteer overlay network.</div>
-            <div class="tag">#PRIVACY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Trojan Horse</div>
-            <div class="term-def">Any malicious computer program which misleads users of its true intent.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Two-Factor Authentication (2FA)</div>
-            <div class="term-def">A subset of Multi-factor authentication that requires exactly two factors to verify the user.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <h2 class="letter-sep">V</h2>
-
-        <div class="term-card">
-            <div class="term-title">VPN (Virtual Private Network)</div>
-            <div class="term-def">A technology that creates a safe and encrypted connection over a less secure network, such as the internet.</div>
-            <div class="tag">#PRIVACY</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Vulnerability</div>
-            <div class="term-def">A weakness which can be exploited by a threat actor, such as an attacker, to cross privilege boundaries (i.e. perform unauthorized actions) within a computer system.</div>
-            <div class="tag">#GENERAL</div>
-        </div>
-
-        <h2 class="letter-sep">W</h2>
-
-        <div class="term-card">
-            <div class="term-title">WAF (Web Application Firewall)</div>
-            <div class="term-def">A specific form of application firewall that filters, monitors, and blocks HTTP traffic to and from a web service.</div>
-            <div class="tag">#DEFENSE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">White Hat</div>
-            <div class="term-def">An ethical computer hacker, or a computer security expert, who specializes in penetration testing and in other testing methodologies that ensures the security of an organization's information systems.</div>
-            <div class="tag">#CULTURE</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Whois</div>
-            <div class="term-def">A query and response protocol that is widely used for querying databases that store the registered users or assignees of an Internet resource, such as a domain name.</div>
-            <div class="tag">#OSINT</div>
-        </div>
-
-        <div class="term-card">
-            <div class="term-title">Worm</div>
-            <div class="term-def">A standalone malware computer program that replicates itself in order to spread to other computers.</div>
-            <div class="tag">#MALWARE</div>
-        </div>
-
-        <h2 class="letter-sep">X</h2>
-
-        <div class="term-card">
-            <div class="term-title">XSS (Cross-Site Scripting)</div>
-            <div class="term-def">A type of security vulnerability typically found in web applications. XSS attacks enable attackers to inject client-side scripts into web pages viewed by other users.</div>
-            <div class="tag">#WEB_VULN</div>
-        </div>
-
-        <h2 class="letter-sep">Z</h2>
-
-        <div class="term-card">
-            <div class="term-title">Zero-Day</div>
-            <div class="term-def">A computer-software vulnerability that is unknown to those who would be interested in mitigating the vulnerability (including the vendor).</div>
-            <div class="tag">#CRITICAL</div>
-        </div>
-
-        <footer style="margin-top: 50px; text-align: center; font-size: 0.9rem; color: #666; border-top: 1px solid #333; padding-top: 20px;">
-            <p><a href="index.html" style="color:#888; text-decoration:none;">&lt; RETURN_TO_ACADEMY</a></p>
+    <div class="particles-bg"></div>
+
+    <div class="container">
+        <header>
+            <div class="status-bar">
+                <span class="status-item"><i class="fas fa-circle pulse-green"></i> DATABASE: ACCESS_GRANTED</span>
+                <span class="status-item">ENCRYPTION: ON</span>
+                <span class="status-item">V.4.0</span>
+            </div>
+
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="glitch" data-text="ACADEMY">ACADEMY_<span class="highlight">DB</span></span>
+                </h1>
+                <p class="subtitle">
+                    <i class="fas fa-graduation-cap"></i> KNOWLEDGE BASE FOR SECURITY RESEARCHERS
+                </p>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="../index.html" class="nav-item">
+                    <i class="fas fa-home"></i> TOOL
+                </a>
+                <a href="../meta-extractor.html" class="nav-item">
+                    <i class="fas fa-image"></i> EXIF_HUNTER
+                </a>
+                <a href="../emoji-crypt.html" class="nav-item">
+                    <i class="fas fa-lock"></i> EMOJI_CRYPT
+                </a>
+                <a href="index.html" class="nav-item active">
+                    <i class="fas fa-graduation-cap"></i> ACADEMY
+                </a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="article-container">
+                <div class="breadcrumb">
+                    <i class="fas fa-terminal"></i> <a href="../index.html">ROOT</a> / <a href="index.html">ACADEMY</a> / GLOSSARY_DB
+                </div>
+
+                <h1>>> TERMINAL_GLOSSARY_V.2</h1>
+                <p class="subtitle-gl">The definitive database of 100+ cybersecurity definitions.</p>
+                
+                <div class="ad-container" style="margin: 30px 0;">
+                    <p class="ad-label"><i class="fas fa-ad"></i> SPONSORED_INTELLIGENCE</p>
+                    <script async="async" data-cfasync="false" src="https://pl28558446.effectivegatecpm.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
+                    <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
+                </div>
+
+                <div class="search-bar-fake">
+                    > SYSTEM_STATUS: ALL RECORDS LOADED [104 TERMS]
+                </div>
+
+                <h2 class="letter-sep">A</h2>
+                
+                <div class="term-card">
+                    <div class="term-title">Advanced Persistent Threat (APT)</div>
+                    <div class="term-def">A stealthy threat actor, typically a nation-state or state-sponsored group, which gains unauthorized access to a computer network and remains undetected for an extended period.</div>
+                    <div class="tag">#THREAT_INTEL</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Adware</div>
+                    <div class="term-def">Software that automatically displays or downloads advertising material (often unwanted) when a user is online.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Air Gap</div>
+                    <div class="term-def">A network security measure employed on one or more computers to ensure that a secure computer network is physically isolated from unsecured networks, such as the public Internet or an unsecured local area network.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">AES (Advanced Encryption Standard)</div>
+                    <div class="term-def">A symmetric block cipher chosen by the U.S. government to protect classified information. It is implemented in software and hardware throughout the world to encrypt sensitive data.</div>
+                    <div class="tag">#CRYPTOGRAPHY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">API (Application Programming Interface)</div>
+                    <div class="term-def">A set of functions and procedures allowing the creation of applications that access the features or data of an operating system, application, or other service. Often a vector for attack if unsecured.</div>
+                    <div class="tag">#DEV</div>
+                </div>
+
+                <h2 class="letter-sep">B</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Backdoor</div>
+                    <div class="term-def">A means to access a computer system or encrypted data that bypasses the system's customary security mechanisms.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Black Hat</div>
+                    <div class="term-def">A hacker who violates computer security for little reason beyond maliciousness or for personal gain.</div>
+                    <div class="tag">#CULTURE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Blue Team</div>
+                    <div class="term-def">A group of individuals who perform an analysis of information systems to ensure security, identify security flaws, verify the effectiveness of each security measure, and make certain all security measures will continue to be effective after implementation.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Botnet</div>
+                    <div class="term-def">A network of private computers infected with malicious software and controlled as a group without the owners' knowledge, often used to send spam or launch DDoS attacks.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Brute Force Attack</div>
+                    <div class="term-def">A trial and error method used by application programs to decode encrypted data such as passwords or Data Encryption Standard (DES) keys, through exhaustive effort (using brute force) rather than employing intellectual strategies.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Bug Bounty</div>
+                    <div class="term-def">A deal offered by many websites, organizations and software developers by which individuals can receive recognition and compensation for reporting bugs, especially those pertaining to security exploits and vulnerabilities.</div>
+                    <div class="tag">#RESEARCH</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Burp Suite</div>
+                    <div class="term-def">A leading software for web application security testing. It acts as a proxy, allowing interception and modification of traffic between browser and server.</div>
+                    <div class="tag">#TOOL</div>
+                </div>
+
+                <h2 class="letter-sep">C</h2>
+
+                <div class="term-card">
+                    <div class="term-title">C2 (Command and Control)</div>
+                    <div class="term-def">A server used by an attacker to maintain communications with compromised systems within a target network.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Cipher</div>
+                    <div class="term-def">An algorithm for performing encryption or decryption—a series of well-defined steps that can be followed as a procedure.</div>
+                    <div class="tag">#CRYPTOGRAPHY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Clickjacking</div>
+                    <div class="term-def">A malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on.</div>
+                    <div class="tag">#WEB_VULN</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Cookie</div>
+                    <div class="term-def">A small piece of data sent from a website and stored on the user's computer by the user's web browser while the user is browsing. Can be stolen to hijack sessions.</div>
+                    <div class="tag">#WEB</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Credential Stuffing</div>
+                    <div class="term-def">A type of cyberattack where stolen account credentials typically consisting of lists of usernames and/or email addresses and the corresponding passwords are used to gain unauthorized access to user accounts.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">CSRF (Cross-Site Request Forgery)</div>
+                    <div class="term-def">An attack that forces an end user to execute unwanted actions on a web application in which they're currently authenticated.</div>
+                    <div class="tag">#WEB_VULN</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">CVE (Common Vulnerabilities and Exposures)</div>
+                    <div class="term-def">A list of publicly disclosed computer security flaws. When someone refers to a CVE, they mean a security flaw that has been assigned a CVE ID number.</div>
+                    <div class="tag">#STANDARD</div>
+                </div>
+
+                <h2 class="letter-sep">D</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Dark Web</div>
+                    <div class="term-def">A part of the internet that isn't indexed by search engines. You've likely heard of it as a hotbed of criminal activity — and it is. Researchers often use Tor to access it.</div>
+                    <div class="tag">#NETWORK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">DDoS (Distributed Denial of Service)</div>
+                    <div class="term-def">A malicious attempt to disrupt the normal traffic of a targeted server, service or network by overwhelming the target or its surrounding infrastructure with a flood of Internet traffic.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Deep Web</div>
+                    <div class="term-def">The part of the World Wide Web that is not indexed by standard web search-engines. This includes email inboxes, banking portals, and private databases.</div>
+                    <div class="tag">#NETWORK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Dictionary Attack</div>
+                    <div class="term-def">An attempted illegal entry to a computer system that uses a dictionary headword list to generate possible passwords.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Dorking (Google Hacking)</div>
+                    <div class="term-def">The use of advanced search operators within a search engine to locate specific strings of text or security vulnerabilities that are not readily visible.</div>
+                    <div class="tag">#OSINT</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Doxing</div>
+                    <div class="term-def">The act of publicly revealing previously private personal information about an individual or organization, usually through the Internet.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <h2 class="letter-sep">E</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Encryption</div>
+                    <div class="term-def">The process of encoding a message or information in such a way that only authorized parties can access it and those who are not authorized cannot.</div>
+                    <div class="tag">#CRYPTOGRAPHY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Exif Data</div>
+                    <div class="term-def">Metadata embedded within image files that can contain information about the camera, settings, and sometimes GPS location coordinates.</div>
+                    <div class="tag">#OSINT</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Exploit</div>
+                    <div class="term-def">Code that takes advantage of a software vulnerability or security flaw. It allows an attacker to remotely access a network or gain administrator privileges.</div>
+                    <div class="tag">#OFFENSIVE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Exploit Kit</div>
+                    <div class="term-def">A toolkit used to automate the exploitation of client-side vulnerabilities, usually targeting browsers and plugins.</div>
+                    <div class="tag">#TOOL</div>
+                </div>
+
+                <h2 class="letter-sep">F</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Firewall</div>
+                    <div class="term-def">A network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Forensics</div>
+                    <div class="term-def">The application of investigation and analysis techniques to gather and preserve evidence from a particular computing device in a way that is suitable for presentation in a court of law.</div>
+                    <div class="tag">#INVESTIGATION</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Fuzzing</div>
+                    <div class="term-def">A quality assurance technique used to discover coding errors and security loopholes in software, operating systems or networks by inputting massive amounts of random data, called fuzz, to the system in an attempt to make it crash.</div>
+                    <div class="tag">#TESTING</div>
+                </div>
+
+                <h2 class="letter-sep">G</h2>
+
+                <div class="term-card">
+                    <div class="term-title">GDPR</div>
+                    <div class="term-def">General Data Protection Regulation. A legal framework that sets guidelines for the collection and processing of personal information from individuals who live in the European Union (EU).</div>
+                    <div class="tag">#LEGAL</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Grey Hat</div>
+                    <div class="term-def">A computer security expert who may sometimes violate laws or typical ethical standards, but does not have the malicious intent characteristic of a black hat hacker.</div>
+                    <div class="tag">#CULTURE</div>
+                </div>
+
+                <h2 class="letter-sep">H</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Hash</div>
+                    <div class="term-def">A mathematical function that converts a numerical input value into another compressed numerical value. Essential for verifying data integrity and storing passwords securely (e.g., MD5, SHA-256).</div>
+                    <div class="tag">#CRYPTOGRAPHY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Honeypot</div>
+                    <div class="term-def">A decoy computer system for trapping hackers or tracking new hacking methods. Honeypots are designed to purposely engage and deceive hackers and identify malicious activities.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">HTTPS</div>
+                    <div class="term-def">Hypertext Transfer Protocol Secure. An extension of the Hypertext Transfer Protocol (HTTP). It is used for secure communication over a computer network, and is widely used on the Internet.</div>
+                    <div class="tag">#PROTOCOL</div>
+                </div>
+
+                <h2 class="letter-sep">I</h2>
+
+                <div class="term-card">
+                    <div class="term-title">IDS (Intrusion Detection System)</div>
+                    <div class="term-def">A device or software application that monitors a network or system for malicious activity or policy violations.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">IoT (Internet of Things)</div>
+                    <div class="term-def">The interconnection via the Internet of computing devices embedded in everyday objects, enabling them to send and receive data. Often insecure.</div>
+                    <div class="tag">#HARDWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">IP Address</div>
+                    <div class="term-def">A unique string of numbers separated by periods that identifies each computer using the Internet Protocol to communicate over a network.</div>
+                    <div class="tag">#NETWORK</div>
+                </div>
+
+                <h2 class="letter-sep">K</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Keylogger</div>
+                    <div class="term-def">A type of surveillance software (considered to be either software or spyware) that has the capability to record every keystroke you make to a log file, usually encrypted.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <h2 class="letter-sep">L</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Logic Bomb</div>
+                    <div class="term-def">A piece of code intentionally inserted into a software system that will set off a malicious function when specified conditions are met.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <h2 class="letter-sep">M</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Malware</div>
+                    <div class="term-def">Software that is specifically designed to disrupt, damage, or gain unauthorized access to a computer system. Includes viruses, worms, trojans, ransomware, etc.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Man-in-the-Middle (MitM)</div>
+                    <div class="term-def">An attack where the attacker secretly relays and possibly alters the communication between two parties who believe they are directly communicating with each other.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Metadata</div>
+                    <div class="term-def">Data that provides information about other data. For example, the author, date created, date modified, and file size are examples of document metadata.</div>
+                    <div class="tag">#OSINT</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Multi-Factor Authentication (MFA)</div>
+                    <div class="term-def">An electronic authentication method in which a user is granted access to a website or application only after successfully presenting two or more pieces of evidence (or factors).</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <h2 class="letter-sep">O</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Open Port</div>
+                    <div class="term-def">A TCP or UDP port number that is configured to accept packets. In contrast, a port which rejects connections or ignores all packets directed at it is a closed port.</div>
+                    <div class="tag">#NETWORK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">OSINT (Open Source Intelligence)</div>
+                    <div class="term-def">Data collected from publicly available sources to be used in an intelligence context. Sources include social media, public records, and the surface web.</div>
+                    <div class="tag">#OSINT</div>
+                </div>
+
+                <h2 class="letter-sep">P</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Packet Sniffer</div>
+                    <div class="term-def">Software or hardware used to collect data traveling over a network. Can be used legitimately for troubleshooting or maliciously to capture data.</div>
+                    <div class="tag">#TOOL</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Patch</div>
+                    <div class="term-def">A set of changes to a computer program or its supporting data designed to update, fix, or improve it. This includes fixing security vulnerabilities and other bugs.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Payload</div>
+                    <div class="term-def">The component of a computer virus or exploit which executes a malicious activity. It is the "warhead" delivered by the exploit.</div>
+                    <div class="tag">#OFFENSIVE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Penetration Testing (Pentesting)</div>
+                    <div class="term-def">The practice of testing a computer system, network or web application to find security vulnerabilities that an attacker could exploit.</div>
+                    <div class="tag">#OFFENSIVE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Phishing</div>
+                    <div class="term-def">The fraudulent attempt to obtain sensitive information such as usernames, passwords and credit card details by disguising oneself as a trustworthy entity in an electronic communication.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">PII (Personally Identifiable Information)</div>
+                    <div class="term-def">Information that can be used on its own or with other information to identify, contact, or locate a single person, or to identify an individual in context.</div>
+                    <div class="tag">#PRIVACY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Proxy</div>
+                    <div class="term-def">A server that acts as an intermediary for requests from clients seeking resources from other servers. Used to hide IP addresses or bypass filters.</div>
+                    <div class="tag">#NETWORK</div>
+                </div>
+
+                <h2 class="letter-sep">R</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Ransomware</div>
+                    <div class="term-def">A type of malware that threatens to publish the victim's data or perpetually block access to it unless a ransom is paid.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">RAT (Remote Access Trojan)</div>
+                    <div class="term-def">A malware program that includes a back door for administrative control over the target computer.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Red Team</div>
+                    <div class="term-def">An independent group that challenges an organization to improve its effectiveness by assuming an adversarial role or point of view.</div>
+                    <div class="tag">#OFFENSIVE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Rootkit</div>
+                    <div class="term-def">A collection of computer software, typically malicious, designed to enable access to a computer or an area of its software that is not otherwise allowed (for example, to an unauthorized user) and often masks its existence or the existence of other software.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <h2 class="letter-sep">S</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Salt</div>
+                    <div class="term-def">Random data that is used as an additional input to a one-way function that hashes data, a password or passphrase. It protects against dictionary attacks and rainbow table attacks.</div>
+                    <div class="tag">#CRYPTOGRAPHY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Sandbox</div>
+                    <div class="term-def">A security mechanism for separating running programs, usually in an effort to mitigate system failures or software vulnerabilities from spreading.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Script Kiddie</div>
+                    <div class="term-def">A derogatory term for a person who uses existing computer scripts or code to hack into computers, lacking the expertise to write their own.</div>
+                    <div class="tag">#CULTURE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Shodan</div>
+                    <div class="term-def">A search engine that lets the user find specific types of computers (webcams, routers, servers, etc.) connected to the internet using a variety of filters.</div>
+                    <div class="tag">#TOOL</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Social Engineering</div>
+                    <div class="term-def">The psychological manipulation of people into performing actions or divulging confidential information.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Spear Phishing</div>
+                    <div class="term-def">An email or electronic communications scam targeted towards a specific individual, organization or business.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Spoofing</div>
+                    <div class="term-def">A situation in which a person or program successfully identifies as another by falsifying data, to gain an illegitimate advantage.</div>
+                    <div class="tag">#ATTACK</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">SQL Injection (SQLi)</div>
+                    <div class="term-def">A code injection technique used to attack data-driven applications, in which malicious SQL statements are inserted into an entry field for execution.</div>
+                    <div class="tag">#WEB_VULN</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">SSH (Secure Shell)</div>
+                    <div class="term-def">A cryptographic network protocol for operating network services securely over an unsecured network.</div>
+                    <div class="tag">#PROTOCOL</div>
+                </div>
+
+                <h2 class="letter-sep">T</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Tor (The Onion Router)</div>
+                    <div class="term-def">Free and open-source software for enabling anonymous communication. It directs Internet traffic through a free, worldwide, volunteer overlay network.</div>
+                    <div class="tag">#PRIVACY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Trojan Horse</div>
+                    <div class="term-def">Any malicious computer program which misleads users of its true intent.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Two-Factor Authentication (2FA)</div>
+                    <div class="term-def">A subset of Multi-factor authentication that requires exactly two factors to verify the user.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <h2 class="letter-sep">V</h2>
+
+                <div class="term-card">
+                    <div class="term-title">VPN (Virtual Private Network)</div>
+                    <div class="term-def">A technology that creates a safe and encrypted connection over a less secure network, such as the internet.</div>
+                    <div class="tag">#PRIVACY</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Vulnerability</div>
+                    <div class="term-def">A weakness which can be exploited by a threat actor, such as an attacker, to cross privilege boundaries (i.e. perform unauthorized actions) within a computer system.</div>
+                    <div class="tag">#GENERAL</div>
+                </div>
+
+                <h2 class="letter-sep">W</h2>
+
+                <div class="term-card">
+                    <div class="term-title">WAF (Web Application Firewall)</div>
+                    <div class="term-def">A specific form of application firewall that filters, monitors, and blocks HTTP traffic to and from a web service.</div>
+                    <div class="tag">#DEFENSE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">White Hat</div>
+                    <div class="term-def">An ethical computer hacker, or a computer security expert, who specializes in penetration testing and in other testing methodologies that ensures the security of an organization's information systems.</div>
+                    <div class="tag">#CULTURE</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Whois</div>
+                    <div class="term-def">A query and response protocol that is widely used for querying databases that store the registered users or assignees of an Internet resource, such as a domain name.</div>
+                    <div class="tag">#OSINT</div>
+                </div>
+
+                <div class="term-card">
+                    <div class="term-title">Worm</div>
+                    <div class="term-def">A standalone malware computer program that replicates itself in order to spread to other computers.</div>
+                    <div class="tag">#MALWARE</div>
+                </div>
+
+                <h2 class="letter-sep">X</h2>
+
+                <div class="term-card">
+                    <div class="term-title">XSS (Cross-Site Scripting)</div>
+                    <div class="term-def">A type of security vulnerability typically found in web applications. XSS attacks enable attackers to inject client-side scripts into web pages viewed by other users.</div>
+                    <div class="tag">#WEB_VULN</div>
+                </div>
+
+                <h2 class="letter-sep">Z</h2>
+
+                <div class="term-card">
+                    <div class="term-title">Zero-Day</div>
+                    <div class="term-def">A computer-software vulnerability that is unknown to those who would be interested in mitigating the vulnerability (including the vendor).</div>
+                    <div class="tag">#CRITICAL</div>
+                </div>
+
+                <div style="text-align: center;">
+                    <a href="index.html" class="back-link">&lt; RETURN TO ACADEMY INDEX</a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-container">
+                <div class="footer-section about">
+                    <h3><i class="fas fa-info-circle"></i> ABOUT THE PROJECT</h3>
+                    <p>DorkSearch PRO is an <strong>Open Source</strong> platform dedicated to democratizing <strong>Cybersecurity</strong> and <strong>OSINT</strong> tools.</p>
+                </div>
+                
+                <div class="footer-section links">
+                    <h3><i class="fas fa-link"></i> QUICK LINKS</h3>
+                    <ul>
+                        <li><a href="../index.html"><i class="fas fa-chevron-right"></i> Main Tool</a></li>
+                        <li><a href="../meta-extractor.html"><i class="fas fa-chevron-right"></i> EXIF Hunter</a></li>
+                        <li><a href="../privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 DorkSearch PRO | Developed with <i class="fas fa-heart pulse"></i></p>
+            </div>
         </footer>
+
     </div>
 
+    <script>
+        function createComet() {
+            const container = document.body;
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            const duration = 4 + Math.random() * 6;
+            comet.style.left = Math.random() * 100 + '%';
+            comet.style.setProperty('--comet-duration', duration + 's');
+            comet.style.setProperty('--comet-size', (2 + Math.random() * 3) + 'px');
+            comet.style.setProperty('--tail-length', (80 + Math.random() * 150) + 'px');
+            container.appendChild(comet);
+            setTimeout(() => comet.remove(), duration * 1000);
+        }
+        function spawnComets() {
+            createComet();
+            setTimeout(spawnComets, 1500 + Math.random() * 3000);
+        }
+        spawnComets();
+    </script>
 
 </body>
 </html>
-
