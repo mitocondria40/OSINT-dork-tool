@@ -2100,4 +2100,60 @@ header {
     .container {
         max-width: 100%;
     }
+
+   /* ========================
+   OPTIMIZACIÓN MÓVIL (LIMPIEZA VISUAL)
+   ======================== */
+
+@media (max-width: 768px) {
+    
+    /* 1. OCULTAR ELEMENTOS NO ESENCIALES */
+    /* Aquí listamos las clases que queremos que desaparezcan en el móvil */
+    
+    .status-bar,           /* La barra de "System Online" */
+    .subtitle,             /* El texto debajo del título */
+    .tagline,              /* Los iconos de características */
+    .stats-container,      /* Las tarjetas de estadísticas (números) */
+    .instructions-panel,   /* El panel de "Cómo funciona" */
+    .footer-wave           /* La animación de ola del footer (consume recursos) */
+    {
+        display: none !important;
+    }
+
+    /* 2. COMPACTAR EL ENCABEZADO */
+    /* Reducimos los márgenes para que el buscador suba */
+    
+    header {
+        padding: 10px 0;
+        margin-bottom: 10px;
+    }
+
+    .main-title {
+        font-size: 1.8rem; /* Título más pequeño */
+        margin-bottom: 5px;
+    }
+
+    .pro-badge {
+        font-size: 0.9rem;
+        padding: 2px 6px;
+    }
+
+    /* 3. OPTIMIZAR EL BUSCADOR Y BOTONES */
+    /* Que ocupen menos espacio vertical */
+    
+    .input-section {
+        padding: 15px; /* Menos relleno */
+        margin-bottom: 20px;
+    }
+
+    .mode-switcher {
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .mode-btn {
+        padding: 15px; /* Botones de modo más finos */
+    }
 }
+}
+
