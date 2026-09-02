@@ -17,14 +17,15 @@ const dorksData = [
       { label: "Sitemap intelligence", dork: "inurl:sitemap.xml OR inurl:sitemap_index.xml" }
     ]
   },
-  { type: "sec", category: "Exposed Documents", icon: "fa-file-alt", color: "#ff0066", items: [
-    { label: "PDF documents", dork: "filetype:pdf" },
-    { label: "Spreadsheets", dork: "filetype:xls OR filetype:xlsx OR filetype:csv" },
-    { label: "Word documents", dork: "filetype:doc OR filetype:docx" },
-    { label: "Presentations", dork: "filetype:ppt OR filetype:pptx" },
-    { label: "Text notes", dork: "filetype:txt OR filetype:md" },
-    { label: "Open directories", dork: "intitle:\"index of\"" }
-  ]},
+{ type: "sec", category: "Exposed Documents", icon: "fa-file-alt", color: "#ff0066", items: [
+  { label: "PDF documents", dork: "filetype:pdf" },
+  { label: "Spreadsheets", dork: "filetype:xls OR filetype:xlsx OR filetype:csv" },
+  { label: "Word documents", dork: "filetype:doc OR filetype:docx" },
+  { label: "Presentations", dork: "filetype:ppt OR filetype:pptx" },
+  { label: "Text notes", dork: "filetype:txt OR filetype:md" },
+  { label: "Open directories", dork: "intitle:\"index of\"" },
+  { label: "PDF by title", dork: "site:{domain} intitle:\"{keyword}\" filetype:pdf" }
+]},
   { type: "sec", category: "Cloud Storage Exposure", icon: "fa-cloud", color: "#0099ff", items: [
     { label: "Amazon S3 references", dork: "inurl:s3.amazonaws.com" },
     { label: "Azure Blob references", dork: "inurl:blob.core.windows.net" },
