@@ -24,7 +24,7 @@ const dorksData = [
   { label: "Presentations", dork: "filetype:ppt OR filetype:pptx" },
   { label: "Text notes", dork: "filetype:txt OR filetype:md" },
   { label: "Open directories", dork: "intitle:\"index of\"" },
-  { label: "PDF by title", dork: "site:{domain} intitle:\"{keyword}\" filetype:pdf" }
+ { label: "Site-specific confidential PDFs", dork: "intitle:\"confidential\" filetype:pdf" },
 ]},
   { type: "sec", category: "Cloud Storage Exposure", icon: "fa-cloud", color: "#0099ff", items: [
     { label: "Amazon S3 references", dork: "inurl:s3.amazonaws.com" },
