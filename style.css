@@ -3,8 +3,6 @@
    Cyberpunk Professional Theme
    ======================== */
 
-
-
 :root {
     /* Colores principales */
     --primary: #00ff41;
@@ -880,110 +878,87 @@ header {
     box-shadow: 0 0 0 3px rgba(0, 255, 65, 0.1);
 }
 
-.dorks-grid {
+/* ========================
+   ESTILOS PARA LAS TARJETAS GENERADAS (SCRIPT ORIGINAL)
+   ======================== */
+
+#dorks-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
     margin-top: 30px;
+    align-items: start;
 }
 
-.dork-card {
+.card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     padding: 25px;
-    cursor: pointer;
+    border-radius: 6px;
     transition: var(--transition);
-    position: relative;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
 }
 
-.dork-card::before {
+.card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 3px;
     background: linear-gradient(90deg, transparent, var(--primary), transparent);
     transform: translateX(-100%);
     transition: var(--transition);
 }
 
-.dork-card:hover {
+.card:hover {
     border-color: var(--primary);
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
 
-.dork-card:hover::before {
+.card:hover::before {
     transform: translateX(100%);
 }
 
-.dork-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.dork-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    flex-shrink: 0;
-    transition: all var(--transition);
-    border: 1px solid;
-}
-
-.dork-card:hover .dork-icon {
-    transform: scale(1.1);
-    filter: brightness(1.2);
-}
-
-.dork-title {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-}
-
-.dork-description {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.dork-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 15px;
-    border-top: 1px solid var(--border);
-    margin-top: auto;
-}
-
-.dork-samples {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.dork-action {
+.card h3 {
+    width: 100%;
     color: var(--primary);
     font-size: 1.2rem;
-    transition: var(--transition);
+    letter-spacing: 1px;
+    margin: 0 0 10px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
 }
 
-.dork-card:hover .dork-action {
-    transform: translateX(5px);
+.card button {
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    color: var(--text-bright);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card button:hover {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+    transform: translateY(-2px);
+    font-weight: bold;
 }
 
 /* ========================
@@ -1186,6 +1161,7 @@ header {
 .info-card-header i {
     color: var(--primary);
     font-size: 1.5rem;
+    margin-bottom: 0; /* Add 0 to override any defaults */
 }
 
 .info-card-header h3 {
@@ -1947,10 +1923,6 @@ header {
         padding: 25px 20px;
     }
     
-    .dorks-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .button-group {
         flex-direction: column;
     }
@@ -2000,6 +1972,11 @@ header {
     
     .toast {
         min-width: auto;
+    }
+
+    .card button {
+        width: 100%;
+        flex: none;
     }
 }
 
@@ -2102,52 +2079,6 @@ header {
 }
 
 /* ========================
-   FIX FINAL: ESTILOS FORZADOS PARA BOTONES SIN CLASE
-   ======================== */
-
-.dorks-grid .card, 
-.dork-card,
-div[class*="card"] {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-content: flex-start;
-}
-
-#dorks-container button,
-.dorks-grid button,
-.card button {
-    background: rgba(0, 255, 65, 0.05) !important;
-    border: 1px solid var(--primary) !important;
-    color: var(--text-bright) !important;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin: 0;
-}
-
-#dorks-container button:hover,
-.dorks-grid button:hover,
-.card button:hover {
-    background: var(--primary) !important;
-    color: #000 !important;
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
-    transform: translateY(-2px);
-}
-
-.dorks-grid h3,
-.card h3 {
-    width: 100%;
-    margin-bottom: 10px;
-    color: var(--primary);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 5px;
-}
-
-/* ========================
    LIMPIEZA RADICAL PARA MÓVIL
    (Ocultar Info, Stats y Protocolo)
    ======================== */
@@ -2173,5 +2104,3 @@ div[class*="card"] {
         margin-bottom: 10px;
     }
 }
-
-
