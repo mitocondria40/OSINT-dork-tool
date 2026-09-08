@@ -140,15 +140,16 @@ document.addEventListener('DOMContentLoaded', () => {
   renderButtons();
   setupEventListeners();
   setupAccessibility();
+
+  // Actualizar el placeholder para que sea más claro
+  const kwInput = document.getElementById('keyword-input');
+  if(kwInput) kwInput.placeholder = "Example: password, confidential, admin...";
 });
 
 function renderButtons() {
   const container = document.getElementById('dorks-container');
   
-  if (!container) {
-    console.error('Dorks container not found');
-    return;
-  }
+  if (!container) return;
   
   container.innerHTML = ''; 
   
@@ -178,22 +179,18 @@ function renderButtons() {
 function setupEventListeners() {
   const targetInput = document.getElementById('target');
   const customInput = document.getElementById('custom-dork-input');
-  const keywordInput = document.getElementById('keyword-input'); // ¡Arreglado el ID!
+  const keywordInput = document.getElementById('keyword-input'); 
   
   if (customInput) {
     customInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        runCustomDork();
-      }
+      if (e.key === 'Enter') runCustomDork();
     });
   }
   
   if (targetInput) {
     targetInput.addEventListener('blur', () => {
       const value = targetInput.value.trim();
-      if (value) {
-        targetInput.value = cleanDomain(value);
-      }
+      if (value) targetInput.value = cleanDomain(value);
     });
     
     targetInput.addEventListener('keypress', (e) => {
@@ -203,9 +200,7 @@ function setupEventListeners() {
 
   if (keywordInput) {
     keywordInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        runQuickSearch();
-      }
+      if (e.key === 'Enter') runQuickSearch();
     });
   }
 }
@@ -221,49 +216,53 @@ function setupAccessibility() {
   }
 }
 
-// Lógica al hacer click en un botón de Dork
+// ----------------------------------------------------
+// LÓGICA PRINCIPAL AL HACER CLICK EN UN DORK PREDISEÑADO
+// ----------------------------------------------------
 function updateAndSearch(dorkQuery) {
   const targetInput = document.getElementById('target');
-  const keywordInput = document.getElementById('keyword-input'); // ¡Arreglado el ID!
+  const keywordInput = document.getElementById('keyword-input'); 
   
   let domain = targetInput ? targetInput.value.trim() : "";
   let keyword = keywordInput ? keywordInput.value.trim() : ""; 
 
-  if (!domain) {
-    showNotification('⚠️ Error: Please enter a target domain first.', 'error');
-    if (targetInput) targetInput.focus();
-    return;
+  // Limpiamos y validamos el dominio (si el usuario escribió uno)
+  if (domain) {
+    domain = cleanDomain(domain);
+    if (!isValidDomain(domain)) {
+      showNotification('⚠️ Invalid domain format. Please enter a valid domain (e.g., example.com)', 'error');
+      if (targetInput) targetInput.focus();
+      return;
+    }
+    targetInput.value = domain;
   }
-
-  domain = cleanDomain(domain);
-  
-  if (!isValidDomain(domain)) {
-    showNotification('⚠️ Invalid domain format. Please enter a valid domain (e.g., example.com)', 'error');
-    if (targetInput) targetInput.focus();
-    return;
-  }
-  
-  targetInput.value = domain;
 
   let fullQuery = "";
   
-  if (dorkQuery.startsWith("site:")) {
-    fullQuery = `${dorkQuery} "${domain}"`;
+  // Construimos la query combinando el Dork con el Dominio y el Keyword
+  if (domain) {
+    if (dorkQuery.includes("site:")) {
+      fullQuery = `${dorkQuery} site:${domain}`;
+    } else {
+      fullQuery = `site:${domain} ${dorkQuery}`;
+    }
   } else {
-    fullQuery = `site:${domain} ${dorkQuery}`;
+    fullQuery = dorkQuery; // El dominio ya no es obligatorio
   }
 
   if (keyword !== "") {
     fullQuery += ` "${keyword}"`;
   }
 
-  updateQueryPreview(fullQuery);
-  executeSearch(fullQuery);
+  updateQueryPreview(fullQuery.trim());
+  executeSearch(fullQuery.trim());
   
-  announceToScreenReader(`Searching for ${dorkQuery} on ${domain} ${keyword ? 'with keyword ' + keyword : ''}`);
+  announceToScreenReader(`Searching for ${dorkQuery} ${domain ? 'on ' + domain : ''} ${keyword ? 'with keyword ' + keyword : ''}`);
 }
 
-// Funciones nuevas para los botones de la interfaz
+// ----------------------------------------------------
+// LÓGICA AL HACER CLICK EN "EXECUTE SCAN"
+// ----------------------------------------------------
 function runQuickSearch() {
   const target = document.getElementById('target')?.value.trim() || '';
   const keyword = document.getElementById('keyword-input')?.value.trim() || '';
@@ -274,8 +273,19 @@ function runQuickSearch() {
   }
 
   let query = '';
-  if (target) query += `site:${cleanDomain(target)} `;
-  if (keyword) query += `"${keyword}"`;
+  
+  if (target) {
+    const cleaned = cleanDomain(target);
+    if (!isValidDomain(cleaned)) {
+      showNotification('⚠️ Invalid domain format.', 'error');
+      return;
+    }
+    query += `site:${cleaned} `;
+  }
+  
+  if (keyword) {
+    query += `"${keyword}"`;
+  }
 
   updateQueryPreview(query.trim());
   executeSearch(query.trim());
@@ -292,6 +302,7 @@ function clearAllInputs() {
   clearInput('custom-dork-input');
   const previewBox = document.getElementById('query-preview');
   if (previewBox) previewBox.classList.add('hidden');
+  showNotification('Fields reset successfully', 'info');
 }
 
 function runCustomDork() {
@@ -307,8 +318,8 @@ function runCustomDork() {
   }
 
   if (customDork.includes('site:')) {
-    executeSearch(customDork);
     updateQueryPreview(customDork);
+    executeSearch(customDork);
   } else {
     updateAndSearch(customDork);
   }
@@ -334,52 +345,64 @@ function updateQueryPreview(query) {
   
   previewBox.classList.remove('hidden');
   queryText.textContent = query;
-
-  setupCopyButton(query);
 }
 
-function setupCopyButton(text) {
-  const copyBtn = document.getElementById('copy-btn');
-  
-  if (!copyBtn) return;
-  
-  const newBtn = copyBtn.cloneNode(true);
-  copyBtn.parentNode.replaceChild(newBtn, copyBtn);
-  
-  newBtn.onclick = () => {
-    navigator.clipboard.writeText(text).then(() => {
-      const originalText = newBtn.textContent;
-      newBtn.textContent = '✓ Copied!';
-      newBtn.style.backgroundColor = 'var(--accent-green)';
+function copyQuery() {
+  const queryText = document.getElementById('query-text');
+  if (!queryText || queryText.textContent === 'waiting for input...') return;
+
+  navigator.clipboard.writeText(queryText.textContent).then(() => {
+    const copyBtn = document.getElementById('copy-btn');
+    if (copyBtn) {
+      const originalHTML = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> COPIED!';
+      copyBtn.style.color = '#fff';
       
       setTimeout(() => {
-        newBtn.textContent = originalText;
-        newBtn.style.backgroundColor = '';
+        copyBtn.innerHTML = originalHTML;
+        copyBtn.style.color = '';
       }, 2000);
-      
-      announceToScreenReader('Query copied to clipboard');
-    }).catch(err => {
-      console.error('Failed to copy:', err);
-      showNotification('Failed to copy to clipboard', 'error');
-    });
-  };
+    }
+    showNotification('Query copied to clipboard', 'success');
+  }).catch(err => {
+    console.error('Failed to copy:', err);
+    showNotification('Failed to copy to clipboard', 'error');
+  });
 }
 
 function executeSearch(query) {
+  if (!query) return;
   const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-  
-  const link = document.createElement('a');
-  link.href = googleUrl;
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-  
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  window.open(googleUrl, '_blank', 'noopener,noreferrer');
 }
 
+// ----------------------------------------------------
+// SISTEMA DE NOTIFICACIONES (TOAST)
+// ----------------------------------------------------
 function showNotification(message, type = 'info') {
-  alert(message);
+  const container = document.getElementById('toast-container');
+  if(container) {
+     const toast = document.createElement('div');
+     toast.className = `toast toast-${type}`;
+     
+     let icon = 'fa-info-circle';
+     if (type === 'success') icon = 'fa-check';
+     if (type === 'error' || type === 'warning') icon = 'fa-exclamation-triangle';
+
+     toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+     container.appendChild(toast);
+
+     // Animación de entrada
+     setTimeout(() => toast.classList.add('show'), 10);
+     
+     // Animación de salida y limpieza
+     setTimeout(() => {
+       toast.classList.remove('show');
+       setTimeout(() => toast.remove(), 300);
+     }, 3000);
+  } else {
+     alert(message);
+  }
   announceToScreenReader(message);
 }
 
@@ -415,7 +438,23 @@ function loadExample(dorkText) {
   }
 }
 
-// Exponer funciones necesarias al HTML
+function filterDorks() {
+  const query = (document.getElementById('search-dorks')?.value || '').toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const shouldShow = card.textContent.toLowerCase().includes(query);
+    card.style.display = shouldShow ? '' : 'none';
+  });
+}
+
+function clearHistory() {
+   const hc = document.getElementById('history-container');
+   if(hc) hc.innerHTML = '';
+   showNotification('History cleared', 'info');
+}
+
+// ----------------------------------------------------
+// EXPORTACIÓN DE FUNCIONES AL DOM GLOBAL (MUY IMPORTANTE)
+// ----------------------------------------------------
 window.updateAndSearch = updateAndSearch;
 window.runCustomDork = runCustomDork;
 window.runQuickSearch = runQuickSearch;
@@ -423,3 +462,6 @@ window.clearInput = clearInput;
 window.clearAllInputs = clearAllInputs;
 window.insertOperator = insertOperator;
 window.loadExample = loadExample;
+window.copyQuery = copyQuery;
+window.filterDorks = filterDorks;
+window.clearHistory = clearHistory;
