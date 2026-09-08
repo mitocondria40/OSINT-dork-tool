@@ -178,7 +178,7 @@ function renderButtons() {
 function setupEventListeners() {
   const targetInput = document.getElementById('target');
   const customInput = document.getElementById('custom-dork-input');
-  const keywordInput = document.getElementById('optional-keyword');
+  const keywordInput = document.getElementById('keyword-input'); // ¡Arreglado el ID!
   
   if (customInput) {
     customInput.addEventListener('keypress', (e) => {
@@ -195,12 +195,16 @@ function setupEventListeners() {
         targetInput.value = cleanDomain(value);
       }
     });
+    
+    targetInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') runQuickSearch();
+    });
   }
 
   if (keywordInput) {
     keywordInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
-        showNotification('ℹ️ Por favor, selecciona una categoría de dork abajo para buscar con esta palabra clave.', 'info');
+        runQuickSearch();
       }
     });
   }
@@ -217,9 +221,10 @@ function setupAccessibility() {
   }
 }
 
+// Lógica al hacer click en un botón de Dork
 function updateAndSearch(dorkQuery) {
   const targetInput = document.getElementById('target');
-  const keywordInput = document.getElementById('optional-keyword'); 
+  const keywordInput = document.getElementById('keyword-input'); // ¡Arreglado el ID!
   
   let domain = targetInput ? targetInput.value.trim() : "";
   let keyword = keywordInput ? keywordInput.value.trim() : ""; 
@@ -256,6 +261,37 @@ function updateAndSearch(dorkQuery) {
   executeSearch(fullQuery);
   
   announceToScreenReader(`Searching for ${dorkQuery} on ${domain} ${keyword ? 'with keyword ' + keyword : ''}`);
+}
+
+// Funciones nuevas para los botones de la interfaz
+function runQuickSearch() {
+  const target = document.getElementById('target')?.value.trim() || '';
+  const keyword = document.getElementById('keyword-input')?.value.trim() || '';
+  
+  if (!target && !keyword) {
+    showNotification('⚠️ Please enter a target domain or keyword.', 'warning');
+    return;
+  }
+
+  let query = '';
+  if (target) query += `site:${cleanDomain(target)} `;
+  if (keyword) query += `"${keyword}"`;
+
+  updateQueryPreview(query.trim());
+  executeSearch(query.trim());
+}
+
+function clearInput(id) {
+  const el = document.getElementById(id);
+  if (el) el.value = '';
+}
+
+function clearAllInputs() {
+  clearInput('target');
+  clearInput('keyword-input');
+  clearInput('custom-dork-input');
+  const previewBox = document.getElementById('query-preview');
+  if (previewBox) previewBox.classList.add('hidden');
 }
 
 function runCustomDork() {
@@ -357,5 +393,33 @@ function announceToScreenReader(message) {
   }
 }
 
+function insertOperator(op) {
+  const customInput = document.getElementById('custom-dork-input');
+  if (!customInput) return;
+  const start = customInput.selectionStart;
+  const end = customInput.selectionEnd;
+  const text = customInput.value;
+  const before = text.substring(0, start);
+  const after = text.substring(end);
+  
+  customInput.value = before + op + ' ' + after;
+  customInput.selectionStart = customInput.selectionEnd = start + op.length + 1;
+  customInput.focus();
+}
+
+function loadExample(dorkText) {
+  const customInput = document.getElementById('custom-dork-input');
+  if (customInput) {
+    customInput.value = dorkText;
+    customInput.focus();
+  }
+}
+
+// Exponer funciones necesarias al HTML
 window.updateAndSearch = updateAndSearch;
 window.runCustomDork = runCustomDork;
+window.runQuickSearch = runQuickSearch;
+window.clearInput = clearInput;
+window.clearAllInputs = clearAllInputs;
+window.insertOperator = insertOperator;
+window.loadExample = loadExample;
