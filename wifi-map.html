@@ -59,13 +59,14 @@
 
         /* === CLUSTER STYLING (HACKER THEME) === */
         .marker-cluster {
-            background-color: rgba(0, 255, 65, 0.3) !important;
+            background-color: rgba(57, 255, 20, 0.3) !important; /* Adaptado al verde neón */
             border-radius: 20px;
         }
         .marker-cluster div {
             background-color: #0a0a0a !important;
-            color: #00ff41 !important;
-            border: 1px solid #00ff41;
+            color: #39FF14 !important; /* Verde Neón */
+            border: 1px solid #39FF14;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.5); /* Glow para los clusters */
             font-family: 'JetBrains Mono', monospace;
             font-weight: bold;
             display: flex;
@@ -90,6 +91,13 @@
             word-break: break-all;
             margin-bottom: 8px;
         }
+        
+        /* Efecto neón para el logo dentro del popup */
+        .wifi-popup .essid i {
+            color: #39FF14;
+            text-shadow: 0 0 5px #39FF14, 0 0 10px #39FF14;
+        }
+
         .wifi-popup .field-row {
             display: flex;
             align-items: center;
@@ -251,7 +259,7 @@
                 </h1>
 
                 <p class="subtitle">
-                    <i class="fas fa-wifi"></i> GLOBAL COMMUNITY WIFI DATABASE
+                    <i class="fas fa-wifi" style="color: #39FF14; text-shadow: 0 0 8px #39FF14;"></i> GLOBAL COMMUNITY WIFI DATABASE
                     <span class="separator">●</span>
                     <i class="fas fa-users"></i> SHARED BY THE COMMUNITY
                 </p>
@@ -284,7 +292,7 @@
                 <div class="info-grid" style="display: flex; justify-content: center; align-items: center;">
                     <div style="max-width: 700px;">
                         <h4 style="color:var(--text-bright); margin-bottom:10px;"><i class="fas fa-angle-right"></i> HOW TO USE IT</h4>
-                        <p style="font-size:0.9rem; color:var(--text-dim);">Zoom into your area or use "Locate Me". Tap any marker to reveal the network name and password.</p>
+                        <p style="font-size:0.9rem; color:var(--text-dim);">Zoom into your area or use "Locate Me". Tap any marker to reveal the network name and password. Only connect to networks you have permission to use.</p>
                     </div>
                 </div>
             </section>
@@ -439,7 +447,8 @@
     function wifiIcon() {
         return L.divIcon({
             className: 'wifi-div-icon',
-            html: '<i class="fas fa-wifi" style="color:#00ff41; font-size:16px; text-shadow:0 0 4px #000;"></i>',
+            // Efecto verde neón intenso con múltiples capas de sombra
+            html: '<i class="fas fa-wifi" style="color: #39FF14; font-size: 18px; text-shadow: 0 0 5px #39FF14, 0 0 10px #39FF14, 0 0 15px #39FF14, 0 0 2px black;"></i>',
             iconSize: [20, 20],
             iconAnchor: [10, 10]
         });
