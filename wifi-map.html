@@ -59,6 +59,22 @@
             filter: grayscale(0%) invert(100%) contrast(100%) !important;
         }
 
+        /* === CLUSTER STYLING (HACKER THEME) === */
+        .marker-cluster {
+            background-color: rgba(0, 255, 65, 0.3) !important;
+            border-radius: 20px;
+        }
+        .marker-cluster div {
+            background-color: #0a0a0a !important;
+            color: #00ff41 !important;
+            border: 1px solid #00ff41;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .leaflet-popup-content-wrapper {
             background: var(--bg-card);
             color: var(--text);
@@ -173,25 +189,6 @@
         }
         .map-status-bar span strong { color: var(--primary); }
 
-        .map-hint-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            z-index: 500;
-        }
-        .map-hint-box {
-            background: rgba(10,10,10,0.92);
-            border: 1px solid var(--primary);
-            color: var(--text-bright);
-            padding: 10px 18px;
-            font-size: 0.85rem;
-            border-radius: 4px;
-            filter: grayscale(0%) invert(100%) contrast(100%);
-        }
-
         .cta-panel {
             margin-top: 30px;
             background: var(--bg-card);
@@ -288,9 +285,6 @@
 
                 <div class="map-shell">
                     <div id="wifi-map"></div>
-                    <div class="map-hint-overlay" id="zoom-hint" style="display:none;">
-                        <div class="map-hint-box"><i class="fas fa-search-plus"></i> Zoom in to reveal individual WiFi points in this area</div>
-                    </div>
                 </div>
 
                 <div class="map-status-bar">
@@ -369,46 +363,30 @@
 
     <script>
     /* =====================================================================
-       WIFI MAP MODULE
+       WIFI MAP MODULE (CLUSTERED)
        -----------------------------------------------------------------
-       Data architecture (required because the source dataset is 500MB-1GB
-       and this site has no backend — everything must stay static):
-
+       Data architecture:
        wifi-data/
-         density.json              -> [{lat, lon, count}, ...]  (tiny file,
-                                       one entry per grid cell, used for the
-                                       low-zoom "heat" preview)
-         tiles/{latIdx}_{lonIdx}.json
-                                    -> [{essid, key, comment, lat, lon}, ...]
-                                       one file per grid cell, only fetched
-                                       when that cell is inside the current
-                                       viewport AND the zoom level is high
-                                       enough to show individual points.
-
-       Both files are generated offline from nets.json + geo.json +
-       comments.json by build_tiles.py (see that script). Until you run it
-       and upload the wifi-data/ folder next to this page, the map falls
-       back to a small embedded DEMO dataset so the page isn't empty.
+         density.json      -> Kept only as a simple "ping" to check if the
+                              data folder exists on the server.
+         tiles/{lat}_{lon}.json -> Point data loaded incrementally.
        ===================================================================== */
 
     const CONFIG = {
-        DATA_BASE: 'wifi-data/',          // folder relative to this page
-        GRID_SIZE: 0.25,                   // degrees per tile, must match build_tiles.py
-        MIN_ZOOM_FOR_POINTS: 11,           // below this zoom, only the density layer shows
-        MAX_MARKERS_PER_VIEW: 4000         // safety cap so a huge city doesn't freeze the browser
+        DATA_BASE: 'wifi-data/',          
+        GRID_SIZE: 0.25,                  
+        MAX_MARKERS_PER_VIEW: 4000        
     };
 
-    // Demo fallback points (based on the sample records the user shared) —
-    // only used if wifi-data/density.json can't be fetched (404 / not deployed yet).
     const DEMO_POINTS = [
         { essid: 'matrixhome_43', key: '83882272', comment: 'Router Scan', lat: 60.0108, lon: 30.3473 },
         { essid: 'Airtel_Home_9F2', key: 'delhi2024', comment: 'India, Airtel', lat: 28.5553, lon: 77.0855 },
-        { essid: 'MGTS_WIFI_77', key: 'moskva1234', comment: 'Ð’ÑÑ Ð Ð¾ÑÑÐ¸Ñ WIFIMAP', lat: 55.7916, lon: 37.9575 },
+        { essid: 'MGTS_WIFI_77', key: 'moskva1234', comment: 'Вся Россия WIFIMAP', lat: 55.7916, lon: 37.9575 },
         { essid: 'CasaLibre_CO', key: 'telmex2020', comment: 'Colombia, Telmex', lat: 4.7110, lon: -74.0721 },
         { essid: 'FreeSpot_BCN', key: 'barcelona21', comment: 'Community spot', lat: 41.3874, lon: 2.1686 }
     ];
 
-    let map, clusterGroup, densityLayer;
+    let map, clusterGroup;
     const loadedCells = new Set();
     const allMarkersById = [];
     let usingDemoData = false;
@@ -421,13 +399,15 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        clusterGroup = L.markerClusterGroup({ maxClusterRadius: 50, chunkedLoading: true });
+        clusterGroup = L.markerClusterGroup({ 
+            maxClusterRadius: 50, 
+            chunkedLoading: true 
+        });
+        
         map.addLayer(clusterGroup);
-
         map.on('moveend zoomend', onMapMove);
 
-        loadDensityLayer();
-        onMapMove();
+        checkDataAvailability().then(() => onMapMove());
     }
 
     function wifiIcon() {
@@ -472,7 +452,6 @@
     }
 
     function cellKey(latIdx, lonIdx) { return `${latIdx}_${lonIdx}`; }
-
     function roundCell(n) { return Math.round(n * 1e6) / 1e6; }
 
     function cellsInBounds(bounds) {
@@ -490,12 +469,11 @@
         return cells;
     }
 
-    async function loadDensityLayer() {
+    async function checkDataAvailability() {
         try {
+            // Quick ping to check if the data exists. We don't render it anymore.
             const res = await fetch(CONFIG.DATA_BASE + 'density.json');
-            if (!res.ok) throw new Error('no density.json');
-            const cells = await res.json();
-            renderDensity(cells);
+            if (!res.ok) throw new Error('Data unavailable');
         } catch (e) {
             usingDemoData = true;
             document.getElementById('data-warning').style.display = 'inline';
@@ -504,37 +482,13 @@
         }
     }
 
-    function renderDensity(cells) {
-        const canvasRenderer = L.canvas({ padding: 0.5 });
-        densityLayer = L.layerGroup();
-        cells.forEach(c => {
-            const radius = Math.min(28, 4 + Math.log(c.count + 1) * 4);
-            L.circleMarker([c.lat, c.lon], {
-                renderer: canvasRenderer,
-                radius,
-                color: '#00ff41',
-                weight: 1,
-                fillColor: '#00ff41',
-                fillOpacity: 0.25,
-                interactive: false
-            }).addTo(densityLayer);
-        });
-        if (map.getZoom() < CONFIG.MIN_ZOOM_FOR_POINTS) densityLayer.addTo(map);
-    }
-
     async function onMapMove() {
-        const zoom = map.getZoom();
-        document.getElementById('zoom-level').textContent = zoom;
+        document.getElementById('zoom-level').textContent = map.getZoom();
 
-        const belowThreshold = zoom < CONFIG.MIN_ZOOM_FOR_POINTS;
-        document.getElementById('zoom-hint').style.display = belowThreshold ? 'flex' : 'none';
-
-        if (densityLayer) {
-            if (belowThreshold && !map.hasLayer(densityLayer)) densityLayer.addTo(map);
-            if (!belowThreshold && map.hasLayer(densityLayer)) map.removeLayer(densityLayer);
+        if (usingDemoData) { 
+            updateCounters(); 
+            return; 
         }
-
-        if (belowThreshold || usingDemoData) { updateCounters(); return; }
 
         const cells = cellsInBounds(map.getBounds());
         for (const [la, lo] of cells) {
@@ -549,7 +503,7 @@
     async function fetchCell(latIdx, lonIdx) {
         try {
             const res = await fetch(`${CONFIG.DATA_BASE}tiles/${latIdx}_${lonIdx}.json`);
-            if (!res.ok) return; // empty cell, nothing to show
+            if (!res.ok) return; 
             const points = await res.json();
             points.slice(0, CONFIG.MAX_MARKERS_PER_VIEW).forEach(addPoint);
             updateCounters();
@@ -582,7 +536,8 @@
         if (!q) return;
         const match = allMarkersById.find(m => m._wifiEssid.includes(q));
         if (match) {
-            map.setView(match.getLatLng(), Math.max(map.getZoom(), CONFIG.MIN_ZOOM_FOR_POINTS + 2));
+            // Aumenta el zoom general para asegurar que MarkerCluster revele el punto
+            map.setView(match.getLatLng(), 15);
             setTimeout(() => match.openPopup(), 400);
         }
     });
@@ -590,7 +545,7 @@
     document.getElementById('locate-btn').addEventListener('click', () => {
         if (!navigator.geolocation) { showToast('Geolocation not supported by your browser'); return; }
         navigator.geolocation.getCurrentPosition(
-            (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], CONFIG.MIN_ZOOM_FOR_POINTS + 2),
+            (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], 14),
             () => showToast('Could not get your location')
         );
     });
