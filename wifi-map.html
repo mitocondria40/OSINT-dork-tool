@@ -40,7 +40,6 @@
             height: 640px;
             width: 100%;
             background: var(--bg-darker);
-            /* Same "dark mode hack" used on meta-extractor.html for visual consistency */
             filter: grayscale(100%) invert(100%) contrast(85%);
         }
 
@@ -48,7 +47,6 @@
             #wifi-map { height: 460px; }
         }
 
-        /* Un-invert markers, popups and clusters so they keep real colors */
         .leaflet-marker-icon,
         .leaflet-marker-shadow,
         .leaflet-popup,
@@ -203,6 +201,24 @@
         }
         .cta-panel p { color: var(--text-dim); font-size: 0.9rem; max-width: 560px; }
         .cta-panel strong { color: var(--text-bright); }
+        
+        /* Pequeño aviso visual para no dejar el mapa vacío si está muy lejos */
+        .zoom-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,10,0.9);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
     </style>
 </head>
 <body>
@@ -285,13 +301,14 @@
 
                 <div class="map-shell">
                     <div id="wifi-map"></div>
+                    <div id="zoom-alert" class="zoom-overlay"><i class="fas fa-search-plus"></i> Zoom in to load WiFi points</div>
                 </div>
 
                 <div class="map-status-bar">
                     <span>Zoom level: <strong id="zoom-level">-</strong></span>
                     <span>Cells loaded: <strong id="cells-loaded">0</strong></span>
                     <span>Visible points: <strong id="visible-points">0</strong></span>
-                    <span id="data-warning" style="color: var(--warning, #ffcc00); display:none;"><i class="fas fa-exclamation-triangle"></i> Running on demo data — see build_tiles.py</span>
+                    <span id="data-warning" style="color: var(--warning, #ffcc00); display:none;"><i class="fas fa-exclamation-triangle"></i> Running on demo data</span>
                 </div>
             </section>
 
@@ -363,18 +380,13 @@
 
     <script>
     /* =====================================================================
-       WIFI MAP MODULE (CLUSTERED)
-       -----------------------------------------------------------------
-       Data architecture:
-       wifi-data/
-         density.json      -> Kept only as a simple "ping" to check if the
-                              data folder exists on the server.
-         tiles/{lat}_{lon}.json -> Point data loaded incrementally.
+       WIFI MAP MODULE (PERFORMANCE OPTIMIZED)
        ===================================================================== */
 
     const CONFIG = {
         DATA_BASE: 'wifi-data/',          
-        GRID_SIZE: 0.25,                  
+        GRID_SIZE: 0.25,
+        MIN_ZOOM_FOR_POINTS: 8, // <--- CRÍTICO: Previene que intente cargar todo el planeta a la vez
         MAX_MARKERS_PER_VIEW: 4000        
     };
 
@@ -401,7 +413,7 @@
 
         clusterGroup = L.markerClusterGroup({ 
             maxClusterRadius: 50, 
-            chunkedLoading: true 
+            chunkedLoading: true // Ayuda a que no se congele al hacer zoom
         });
         
         map.addLayer(clusterGroup);
@@ -443,6 +455,7 @@
         return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
     }
 
+    // Usado SOLO para los puntos de demostración
     function addPoint(p) {
         const marker = L.marker([p.lat, p.lon], { icon: wifiIcon() });
         marker.bindPopup(popupHtml(p));
@@ -471,7 +484,6 @@
 
     async function checkDataAvailability() {
         try {
-            // Quick ping to check if the data exists. We don't render it anymore.
             const res = await fetch(CONFIG.DATA_BASE + 'density.json');
             if (!res.ok) throw new Error('Data unavailable');
         } catch (e) {
@@ -483,7 +495,17 @@
     }
 
     async function onMapMove() {
-        document.getElementById('zoom-level').textContent = map.getZoom();
+        const currentZoom = map.getZoom();
+        document.getElementById('zoom-level').textContent = currentZoom;
+
+        // Mostrar u ocultar el aviso de hacer zoom
+        const alertBox = document.getElementById('zoom-alert');
+        if (currentZoom < CONFIG.MIN_ZOOM_FOR_POINTS && !usingDemoData) {
+            alertBox.style.display = 'block';
+            return; // ABORTAR: Evita que se congele intentando calcular todo el mapa
+        } else {
+            alertBox.style.display = 'none';
+        }
 
         if (usingDemoData) { 
             updateCounters(); 
@@ -505,9 +527,22 @@
             const res = await fetch(`${CONFIG.DATA_BASE}tiles/${latIdx}_${lonIdx}.json`);
             if (!res.ok) return; 
             const points = await res.json();
-            points.slice(0, CONFIG.MAX_MARKERS_PER_VIEW).forEach(addPoint);
+            
+            // OPTIMIZACIÓN CRÍTICA: Añadir marcadores en bloque
+            const newMarkers = [];
+            points.slice(0, CONFIG.MAX_MARKERS_PER_VIEW).forEach(p => {
+                const marker = L.marker([p.lat, p.lon], { icon: wifiIcon() });
+                marker.bindPopup(popupHtml(p));
+                marker._wifiEssid = (p.essid || '').toLowerCase();
+                allMarkersById.push(marker);
+                newMarkers.push(marker);
+            });
+
+            // addLayers (plural) es 100 veces más rápido que addLayer (singular) dentro de un bucle
+            clusterGroup.addLayers(newMarkers);
             updateCounters();
-        } catch (e) { /* offline cell / network error, silently skip */ }
+
+        } catch (e) { /* error silencioso si no hay celda */ }
     }
 
     function updateCounters() {
@@ -536,7 +571,6 @@
         if (!q) return;
         const match = allMarkersById.find(m => m._wifiEssid.includes(q));
         if (match) {
-            // Aumenta el zoom general para asegurar que MarkerCluster revele el punto
             map.setView(match.getLatLng(), 15);
             setTimeout(() => match.openPopup(), 400);
         }
