@@ -219,6 +219,17 @@
             display: none;
             font-family: 'JetBrains Mono', monospace;
         }
+        
+        /* Contenedor de publicidad */
+        .ad-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 25px 0;
+            min-height: 90px;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -266,21 +277,24 @@
         </header>
 
         <main>
-            <section class="instructions-panel">
-                <div class="panel-header">
+            <section class="instructions-panel" style="text-align: center;">
+                <div class="panel-header" style="justify-content: center;">
                     <i class="fas fa-info-circle"></i> OPERATIONAL BRIEFING
                 </div>
-                <div class="info-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                    <div>
-                        <h4 style="color:var(--text-bright); margin-bottom:10px;"><i class="fas fa-angle-right"></i> THE CONCEPT</h4>
-                        <p style="font-size:0.9rem; color:var(--text-dim);">A crowdsourced, altruistic map of open and shared WiFi networks. Every point was published voluntarily by a member of the community so that no one is left without a connection, anywhere in the world.</p>
-                    </div>
-                    <div>
+                <div class="info-grid" style="display: flex; justify-content: center; align-items: center;">
+                    <div style="max-width: 700px;">
                         <h4 style="color:var(--text-bright); margin-bottom:10px;"><i class="fas fa-angle-right"></i> HOW TO USE IT</h4>
-                        <p style="font-size:0.9rem; color:var(--text-dim);">Zoom into your area or use "Locate Me". Tap any marker to reveal the network name and password. Only connect to networks you have permission to use.</p>
+                        <p style="font-size:0.9rem; color:var(--text-dim);">Zoom into your area or use "Locate Me". Tap any marker to reveal the network name and password.</p>
                     </div>
                 </div>
             </section>
+
+            <!-- ESPACIO ESTRATÉGICO DE PUBLICIDAD -->
+            <div class="ad-container">
+                <script async="async" data-cfasync="false" src="https://pl28558446.profitableratecpmnetwork.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
+                <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
+            </div>
+            <!-- FIN PUBLICIDAD -->
 
             <section class="input-section">
                 <div class="section-header">
@@ -386,7 +400,7 @@
     const CONFIG = {
         DATA_BASE: 'wifi-data/',          
         GRID_SIZE: 0.25,
-        MIN_ZOOM_FOR_POINTS: 8, // <--- CRÍTICO: Previene que intente cargar todo el planeta a la vez
+        MIN_ZOOM_FOR_POINTS: 8, 
         MAX_MARKERS_PER_VIEW: 4000        
     };
 
@@ -413,7 +427,7 @@
 
         clusterGroup = L.markerClusterGroup({ 
             maxClusterRadius: 50, 
-            chunkedLoading: true // Ayuda a que no se congele al hacer zoom
+            chunkedLoading: true 
         });
         
         map.addLayer(clusterGroup);
@@ -455,7 +469,6 @@
         return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
     }
 
-    // Usado SOLO para los puntos de demostración
     function addPoint(p) {
         const marker = L.marker([p.lat, p.lon], { icon: wifiIcon() });
         marker.bindPopup(popupHtml(p));
@@ -498,11 +511,10 @@
         const currentZoom = map.getZoom();
         document.getElementById('zoom-level').textContent = currentZoom;
 
-        // Mostrar u ocultar el aviso de hacer zoom
         const alertBox = document.getElementById('zoom-alert');
         if (currentZoom < CONFIG.MIN_ZOOM_FOR_POINTS && !usingDemoData) {
             alertBox.style.display = 'block';
-            return; // ABORTAR: Evita que se congele intentando calcular todo el mapa
+            return; 
         } else {
             alertBox.style.display = 'none';
         }
@@ -528,7 +540,6 @@
             if (!res.ok) return; 
             const points = await res.json();
             
-            // OPTIMIZACIÓN CRÍTICA: Añadir marcadores en bloque
             const newMarkers = [];
             points.slice(0, CONFIG.MAX_MARKERS_PER_VIEW).forEach(p => {
                 const marker = L.marker([p.lat, p.lon], { icon: wifiIcon() });
@@ -538,11 +549,10 @@
                 newMarkers.push(marker);
             });
 
-            // addLayers (plural) es 100 veces más rápido que addLayer (singular) dentro de un bucle
             clusterGroup.addLayers(newMarkers);
             updateCounters();
 
-        } catch (e) { /* error silencioso si no hay celda */ }
+        } catch (e) { }
     }
 
     function updateCounters() {
