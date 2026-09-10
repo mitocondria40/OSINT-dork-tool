@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3469502188782084" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MHWF85ZZ24"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MHWF85ZZ24');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global WiFi Map - Community Shared Networks | DorkSearch PRO</title>
+    <meta name="description" content="Community-powered map of publicly shared WiFi networks around the world. Find a connection wherever you are, and share your own to help others.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* === WIFI MAP MODULE === */
+
+        .map-shell {
+            position: relative;
+            border: 2px solid var(--border, #222);
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        #wifi-map {
+            height: 640px;
+            width: 100%;
+            background: var(--bg-darker);
+            /* Same "dark mode hack" used on meta-extractor.html for visual consistency */
+            filter: grayscale(100%) invert(100%) contrast(85%);
+        }
+
+        @media (max-width: 700px) {
+            #wifi-map { height: 460px; }
+        }
+
+        /* Un-invert markers, popups and clusters so they keep real colors */
+        .leaflet-marker-icon,
+        .leaflet-marker-shadow,
+        .leaflet-popup,
+        .marker-cluster,
+        .marker-cluster div,
+        .leaflet-control-zoom,
+        .leaflet-control-attribution {
+            filter: grayscale(0%) invert(100%) contrast(100%) !important;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+        }
+        .leaflet-popup-tip { background: var(--bg-card); }
+        .leaflet-popup-content { margin: 14px 16px; font-family: 'JetBrains Mono', monospace; }
+
+        .wifi-popup .essid {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.05rem;
+            color: var(--primary);
+            font-weight: bold;
+            word-break: break-all;
+            margin-bottom: 8px;
+        }
+        .wifi-popup .field-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: var(--bg-input, #0d0d0d);
+            border-left: 3px solid var(--primary);
+            padding: 6px 8px;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+        .wifi-popup .field-row .val {
+            color: var(--text-bright);
+            word-break: break-all;
+        }
+        .wifi-popup .copy-btn {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 3px;
+            padding: 2px 7px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            transition: var(--transition, 0.2s);
+        }
+        .wifi-popup .copy-btn:hover { background: var(--primary); color: #000; }
+        .wifi-popup .comment {
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            margin-top: 6px;
+            font-style: italic;
+        }
+        .wifi-popup .gmaps-link {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.78rem;
+            color: var(--accent);
+        }
+
+        /* Top controls bar over the map */
+        .map-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-top: 18px;
+        }
+        .map-search-wrap {
+            flex: 1;
+            min-width: 220px;
+            display: flex;
+            align-items: stretch;
+            background: var(--bg-input, #0d0d0d);
+            border: 1px solid var(--border, #222);
+        }
+        .map-search-wrap:focus-within { border-color: var(--primary); }
+        .map-search-wrap i {
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            color: var(--text-dim);
+        }
+        #wifi-search {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            padding: 10px 8px;
+        }
+        .map-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border, #222);
+            color: var(--text);
+            padding: 10px 16px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: var(--transition, 0.2s);
+            white-space: nowrap;
+        }
+        .map-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .map-btn.primary { background: var(--primary); color: #000; border-color: var(--primary); font-weight: bold; }
+        .map-btn.primary:hover { background: var(--primary-dark); }
+
+        .map-status-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 10px;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+        }
+        .map-status-bar span strong { color: var(--primary); }
+
+        .map-hint-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 500;
+        }
+        .map-hint-box {
+            background: rgba(10,10,10,0.92);
+            border: 1px solid var(--primary);
+            color: var(--text-bright);
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            filter: grayscale(0%) invert(100%) contrast(100%);
+        }
+
+        .cta-panel {
+            margin-top: 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--border, #222);
+            border-left: 3px solid var(--accent);
+            padding: 20px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cta-panel p { color: var(--text-dim); font-size: 0.9rem; max-width: 560px; }
+        .cta-panel strong { color: var(--text-bright); }
+    </style>
+</head>
+<body>
+    <div class="grid-overlay"></div>
+    <div class="particles-bg"></div>
+
+    <div class="container">
+        <header>
+            <div class="status-bar">
+                <span class="status-item"><i class="fas fa-circle pulse-green"></i> SYSTEM: ONLINE</span>
+                <span class="status-item">MODULE: GEO_NETWORK</span>
+                <span class="status-item">V.1.0 COMMUNITY</span>
+                <span class="status-item" id="points-counter">POINTS LOADED: 0</span>
+            </div>
+
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="glitch" data-text="WIFI_MAP">WIFI_<span class="highlight">MAP</span></span>
+                </h1>
+
+                <p class="subtitle">
+                    <i class="fas fa-wifi"></i> GLOBAL COMMUNITY WIFI DATABASE
+                    <span class="separator">●</span>
+                    <i class="fas fa-users"></i> SHARED BY THE COMMUNITY
+                </p>
+            </div>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i> TOOL
+                </a>
+                <a href="meta-extractor.html" class="nav-item">
+                    <i class="fas fa-image"></i> EXIF_HUNTER
+                </a>
+                <a href="emoji-crypt.html" class="nav-item">
+                    <i class="fas fa-lock"></i> EMOJI_CRYPT
+                </a>
+                <a href="wifi-map.html" class="nav-item active">
+                    <i class="fas fa-map-marked-alt"></i> WIFI_MAP
+                </a>
+                <a href="academy/index.html" class="nav-item">
+                    <i class="fas fa-graduation-cap"></i> ACADEMY
+                </a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="instructions-panel">
+                <div class="panel-header">
+                    <i class="fas fa-info-circle"></i> OPERATIONAL BRIEFING
+                </div>
+                <div class="info-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    <div>
+                        <h4 style="color:var(--text-bright); margin-bottom:10px;"><i class="fas fa-angle-right"></i> THE CONCEPT</h4>
+                        <p style="font-size:0.9rem; color:var(--text-dim);">A crowdsourced, altruistic map of open and shared WiFi networks. Every point was published voluntarily by a member of the community so that no one is left without a connection, anywhere in the world.</p>
+                    </div>
+                    <div>
+                        <h4 style="color:var(--text-bright); margin-bottom:10px;"><i class="fas fa-angle-right"></i> HOW TO USE IT</h4>
+                        <p style="font-size:0.9rem; color:var(--text-dim);">Zoom into your area or use "Locate Me". Tap any marker to reveal the network name and password. Only connect to networks you have permission to use.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="input-section">
+                <div class="section-header">
+                    <div>
+                        <i class="fas fa-map-marked-alt"></i>
+                        <h2 style="display:inline; margin-left:8px;">Explore the Map</h2>
+                    </div>
+                </div>
+
+                <div class="map-toolbar">
+                    <div class="map-search-wrap">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="wifi-search" placeholder="Search loaded networks by name (SSID)...">
+                    </div>
+                    <button class="map-btn primary" id="locate-btn"><i class="fas fa-crosshairs"></i> Locate Me</button>
+                    <button class="map-btn" id="reset-view-btn"><i class="fas fa-globe"></i> World View</button>
+                </div>
+
+                <div class="map-shell">
+                    <div id="wifi-map"></div>
+                    <div class="map-hint-overlay" id="zoom-hint" style="display:none;">
+                        <div class="map-hint-box"><i class="fas fa-search-plus"></i> Zoom in to reveal individual WiFi points in this area</div>
+                    </div>
+                </div>
+
+                <div class="map-status-bar">
+                    <span>Zoom level: <strong id="zoom-level">-</strong></span>
+                    <span>Cells loaded: <strong id="cells-loaded">0</strong></span>
+                    <span>Visible points: <strong id="visible-points">0</strong></span>
+                    <span id="data-warning" style="color: var(--warning, #ffcc00); display:none;"><i class="fas fa-exclamation-triangle"></i> Running on demo data — see build_tiles.py</span>
+                </div>
+            </section>
+
+            <div class="cta-panel">
+                <p><strong>Know a WiFi that deserves to be on the map?</strong> Share the network name, password and rough location so others can benefit too. Only submit networks you're authorized to share.</p>
+                <a href="mailto:emploi.contactch@gmail.com?subject=New%20WiFi%20submission" class="map-btn primary"><i class="fas fa-paper-plane"></i> Submit a Network</a>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-container">
+                <div class="footer-section about">
+                    <h3><i class="fas fa-info-circle"></i> ABOUT THE PROJECT</h3>
+                    <p>DorkSearch PRO is an <strong>Open Source</strong> platform dedicated to democratizing <strong>Cybersecurity</strong> and <strong>OSINT</strong> tools.</p>
+                    <p class="quote"><i class="fas fa-quote-left"></i> Knowledge should be free and accessible. Use it responsibly. <i class="fas fa-quote-right"></i></p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">Leaflet</span>
+                        <span class="tech-badge">OpenStreetMap</span>
+                    </div>
+                </div>
+
+                <div class="footer-section links">
+                    <h3><i class="fas fa-link"></i> QUICK LINKS</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Main Tool</a></li>
+                        <li><a href="meta-extractor.html"><i class="fas fa-chevron-right"></i> EXIF Hunter</a></li>
+                        <li><a href="emoji-crypt.html"><i class="fas fa-chevron-right"></i> Emoji Crypt</a></li>
+                        <li><a href="wifi-map.html"><i class="fas fa-chevron-right"></i> WiFi Map</a></li>
+                        <li><a href="academy/index.html"><i class="fas fa-chevron-right"></i> Academy & Tutorials</a></li>
+                        <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section contact">
+                    <h3><i class="fas fa-envelope"></i> CONTACT</h3>
+                    <p>Want to report a network or an issue with the map?</p>
+                    <a href="mailto:emploi.contactch@gmail.com" class="contact-btn">
+                        <i class="fas fa-paper-plane"></i> emploi.contactch@gmail.com
+                    </a>
+                    <div class="social-links">
+                        <a href="https://github.com/mitocondria40/OSINT-dork-tool" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="https://www.instagram.com/dorksearch/" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 DorkSearch PRO | Developed with <i class="fas fa-heart pulse"></i> for the Cybersecurity community</p>
+                <p class="disclaimer">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Disclaimer: Networks listed here are submitted voluntarily by users. Only connect to networks you are authorized to use. We do not verify ownership or accuracy of submissions.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
+
+    <script src="script.js"></script>
+
+    <script>
+    /* =====================================================================
+       WIFI MAP MODULE
+       -----------------------------------------------------------------
+       Data architecture (required because the source dataset is 500MB-1GB
+       and this site has no backend — everything must stay static):
+
+       wifi-data/
+         density.json              -> [{lat, lon, count}, ...]  (tiny file,
+                                       one entry per grid cell, used for the
+                                       low-zoom "heat" preview)
+         tiles/{latIdx}_{lonIdx}.json
+                                    -> [{essid, key, comment, lat, lon}, ...]
+                                       one file per grid cell, only fetched
+                                       when that cell is inside the current
+                                       viewport AND the zoom level is high
+                                       enough to show individual points.
+
+       Both files are generated offline from nets.json + geo.json +
+       comments.json by build_tiles.py (see that script). Until you run it
+       and upload the wifi-data/ folder next to this page, the map falls
+       back to a small embedded DEMO dataset so the page isn't empty.
+       ===================================================================== */
+
+    const CONFIG = {
+        DATA_BASE: 'wifi-data/',          // folder relative to this page
+        GRID_SIZE: 0.25,                   // degrees per tile, must match build_tiles.py
+        MIN_ZOOM_FOR_POINTS: 11,           // below this zoom, only the density layer shows
+        MAX_MARKERS_PER_VIEW: 4000         // safety cap so a huge city doesn't freeze the browser
+    };
+
+    // Demo fallback points (based on the sample records the user shared) —
+    // only used if wifi-data/density.json can't be fetched (404 / not deployed yet).
+    const DEMO_POINTS = [
+        { essid: 'matrixhome_43', key: '83882272', comment: 'Router Scan', lat: 60.0108, lon: 30.3473 },
+        { essid: 'Airtel_Home_9F2', key: 'delhi2024', comment: 'India, Airtel', lat: 28.5553, lon: 77.0855 },
+        { essid: 'MGTS_WIFI_77', key: 'moskva1234', comment: 'Ð’ÑÑ Ð Ð¾ÑÑÐ¸Ñ WIFIMAP', lat: 55.7916, lon: 37.9575 },
+        { essid: 'CasaLibre_CO', key: 'telmex2020', comment: 'Colombia, Telmex', lat: 4.7110, lon: -74.0721 },
+        { essid: 'FreeSpot_BCN', key: 'barcelona21', comment: 'Community spot', lat: 41.3874, lon: 2.1686 }
+    ];
+
+    let map, clusterGroup, densityLayer;
+    const loadedCells = new Set();
+    const allMarkersById = [];
+    let usingDemoData = false;
+
+    function initMap() {
+        map = L.map('wifi-map', { worldCopyJump: true }).setView([20, 0], 3);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        clusterGroup = L.markerClusterGroup({ maxClusterRadius: 50, chunkedLoading: true });
+        map.addLayer(clusterGroup);
+
+        map.on('moveend zoomend', onMapMove);
+
+        loadDensityLayer();
+        onMapMove();
+    }
+
+    function wifiIcon() {
+        return L.divIcon({
+            className: 'wifi-div-icon',
+            html: '<i class="fas fa-wifi" style="color:#00ff41; font-size:16px; text-shadow:0 0 4px #000;"></i>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+    }
+
+    function popupHtml(p) {
+        const safeEssid = escapeHtml(p.essid || 'Unknown SSID');
+        const safeKey = escapeHtml(p.key || '(open network)');
+        const gmaps = `https://www.google.com/maps?q=${p.lat},${p.lon}`;
+        return `
+            <div class="wifi-popup">
+                <div class="essid"><i class="fas fa-wifi"></i> ${safeEssid}</div>
+                <div class="field-row">
+                    <span class="val">${safeKey}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${safeKey.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                ${p.comment ? `<div class="comment"><i class="fas fa-comment-dots"></i> ${escapeHtml(p.comment)}</div>` : ''}
+                <a class="gmaps-link" href="${gmaps}" target="_blank" rel="noopener">
+                    <i class="fas fa-directions"></i> Open in Google Maps
+                </a>
+            </div>`;
+    }
+
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
+    function addPoint(p) {
+        const marker = L.marker([p.lat, p.lon], { icon: wifiIcon() });
+        marker.bindPopup(popupHtml(p));
+        marker._wifiEssid = (p.essid || '').toLowerCase();
+        clusterGroup.addLayer(marker);
+        allMarkersById.push(marker);
+    }
+
+    function cellKey(latIdx, lonIdx) { return `${latIdx}_${lonIdx}`; }
+
+    function roundCell(n) { return Math.round(n * 1e6) / 1e6; }
+
+    function cellsInBounds(bounds) {
+        const cells = [];
+        const gs = CONFIG.GRID_SIZE;
+        const latStart = roundCell(Math.floor(bounds.getSouth() / gs) * gs);
+        const latEnd = roundCell(Math.ceil(bounds.getNorth() / gs) * gs);
+        const lonStart = roundCell(Math.floor(bounds.getWest() / gs) * gs);
+        const lonEnd = roundCell(Math.ceil(bounds.getEast() / gs) * gs);
+        for (let la = latStart; la < latEnd; la = roundCell(la + gs)) {
+            for (let lo = lonStart; lo < lonEnd; lo = roundCell(lo + gs)) {
+                cells.push([la, lo]);
+            }
+        }
+        return cells;
+    }
+
+    async function loadDensityLayer() {
+        try {
+            const res = await fetch(CONFIG.DATA_BASE + 'density.json');
+            if (!res.ok) throw new Error('no density.json');
+            const cells = await res.json();
+            renderDensity(cells);
+        } catch (e) {
+            usingDemoData = true;
+            document.getElementById('data-warning').style.display = 'inline';
+            DEMO_POINTS.forEach(addPoint);
+            updateCounters();
+        }
+    }
+
+    function renderDensity(cells) {
+        densityLayer = L.layerGroup();
+        cells.forEach(c => {
+            const radius = Math.min(28, 4 + Math.log(c.count + 1) * 4);
+            L.circleMarker([c.lat, c.lon], {
+                radius,
+                color: '#00ff41',
+                weight: 1,
+                fillColor: '#00ff41',
+                fillOpacity: 0.25
+            }).addTo(densityLayer);
+        });
+        if (map.getZoom() < CONFIG.MIN_ZOOM_FOR_POINTS) densityLayer.addTo(map);
+    }
+
+    async function onMapMove() {
+        const zoom = map.getZoom();
+        document.getElementById('zoom-level').textContent = zoom;
+
+        const belowThreshold = zoom < CONFIG.MIN_ZOOM_FOR_POINTS;
+        document.getElementById('zoom-hint').style.display = belowThreshold ? 'flex' : 'none';
+
+        if (densityLayer) {
+            if (belowThreshold && !map.hasLayer(densityLayer)) densityLayer.addTo(map);
+            if (!belowThreshold && map.hasLayer(densityLayer)) map.removeLayer(densityLayer);
+        }
+
+        if (belowThreshold || usingDemoData) { updateCounters(); return; }
+
+        const cells = cellsInBounds(map.getBounds());
+        for (const [la, lo] of cells) {
+            const key = cellKey(la, lo);
+            if (loadedCells.has(key)) continue;
+            loadedCells.add(key);
+            fetchCell(la, lo);
+        }
+        updateCounters();
+    }
+
+    async function fetchCell(latIdx, lonIdx) {
+        try {
+            const res = await fetch(`${CONFIG.DATA_BASE}tiles/${latIdx}_${lonIdx}.json`);
+            if (!res.ok) return; // empty cell, nothing to show
+            const points = await res.json();
+            points.slice(0, CONFIG.MAX_MARKERS_PER_VIEW).forEach(addPoint);
+            updateCounters();
+        } catch (e) { /* offline cell / network error, silently skip */ }
+    }
+
+    function updateCounters() {
+        document.getElementById('cells-loaded').textContent = loadedCells.size;
+        document.getElementById('visible-points').textContent = allMarkersById.length;
+        document.getElementById('points-counter').textContent = 'POINTS LOADED: ' + allMarkersById.length;
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => showToast('Password copied to clipboard'));
+    }
+
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.cssText = 'background:var(--bg-card); border:1px solid var(--primary); color:var(--primary); padding:10px 16px; margin-top:8px; font-family:"JetBrains Mono",monospace; font-size:0.85rem; border-radius:4px;';
+        toast.textContent = msg;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    document.getElementById('wifi-search').addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        if (!q) return;
+        const match = allMarkersById.find(m => m._wifiEssid.includes(q));
+        if (match) {
+            map.setView(match.getLatLng(), Math.max(map.getZoom(), CONFIG.MIN_ZOOM_FOR_POINTS + 2));
+            setTimeout(() => match.openPopup(), 400);
+        }
+    });
+
+    document.getElementById('locate-btn').addEventListener('click', () => {
+        if (!navigator.geolocation) { showToast('Geolocation not supported by your browser'); return; }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], CONFIG.MIN_ZOOM_FOR_POINTS + 2),
+            () => showToast('Could not get your location')
+        );
+    });
+
+    document.getElementById('reset-view-btn').addEventListener('click', () => map.setView([20, 0], 3));
+
+    initMap();
+    </script>
+</body>
+</html>
