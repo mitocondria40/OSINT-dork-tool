@@ -1,3 +1,6 @@
+// Variable global para almacenar el motor de búsqueda dinámico
+let currentSearchEngine = "https://www.google.com/search?q=";
+
 const dorksData = [
 {
   category: " Files & Documents",
@@ -136,7 +139,11 @@ const dorksData = [
 }
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Detectar el motor de búsqueda según el navegador al cargar la página
+  await detectBrowserEngine();
+
+  // 2. Renderizar la interfaz
   renderButtons();
   setupEventListeners();
   setupAccessibility();
@@ -145,6 +152,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const kwInput = document.getElementById('keyword-input');
   if(kwInput) kwInput.placeholder = "Example: password, confidential, admin...";
 });
+
+// Función de detección de navegador
+async function detectBrowserEngine() {
+  const ua = navigator.userAgent;
+
+  try {
+    // 1. Comprobar si es Brave (Requiere comprobación asíncrona)
+    if (navigator.brave && await navigator.brave.isBrave()) {
+      currentSearchEngine = "https://search.brave.com/search?q=";
+      console.log("Brave detectado: Usando Brave Search");
+      return;
+    }
+
+    // 2. Comprobar si es Microsoft Edge
+    if (ua.includes("Edg/")) {
+      currentSearchEngine = "https://www.bing.com/search?q=";
+      console.log("Edge detectado: Usando Bing");
+      return;
+    }
+
+    // 3. Comprobar si es DuckDuckGo Privacy Browser
+    if (ua.includes("DuckDuckGo")) {
+      currentSearchEngine = "https://duckduckgo.com/?q=";
+      console.log("DuckDuckGo detectado: Usando DDG");
+      return;
+    }
+
+    // 4. Comprobar si es Opera / Opera GX
+    if (ua.includes("OPR/") || ua.includes("Opera")) {
+      currentSearchEngine = "https://www.google.com/search?q="; 
+      return;
+    }
+
+    // Si es Chrome, Safari, Firefox u otro, se queda el de por defecto (Google)
+    console.log("Navegador estándar detectado: Usando Google");
+  } catch (error) {
+    console.error("Error detectando el navegador, usando Google por defecto.", error);
+  }
+}
 
 function renderButtons() {
   const container = document.getElementById('dorks-container');
@@ -372,8 +418,10 @@ function copyQuery() {
 
 function executeSearch(query) {
   if (!query) return;
-  const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-  window.open(googleUrl, '_blank', 'noopener,noreferrer');
+  
+  // AHORA USA EL MOTOR DETECTADO DINÁMICAMENTE
+  const searchUrl = `${currentSearchEngine}${encodeURIComponent(query)}`;
+  window.open(searchUrl, '_blank', 'noopener,noreferrer');
 }
 
 // ----------------------------------------------------
