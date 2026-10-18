@@ -65,6 +65,37 @@
 
 .scan-btn:disabled { opacity: 0.6; cursor: wait; }
 
+/* ---------- Plain-language layer (fingerprint-explain.js) ---------- */
+.fp-intro-panel { grid-column: 1 / -1; background: var(--bg-darker); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 25px 30px; }
+.fp-intro-panel h3 { font-size: 1rem; letter-spacing: 2px; color: var(--primary); margin-bottom: 15px; }
+.fp-sentences { list-style: none; margin-bottom: 20px; }
+.fp-sentences li { position: relative; padding-left: 22px; margin-bottom: 10px; line-height: 1.7; color: var(--text); }
+.fp-sentences li::before { content: '\203A'; position: absolute; left: 4px; color: var(--primary); font-weight: 700; }
+.fp-how { border-top: 1px solid var(--border); padding-top: 15px; }
+.fp-how p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 12px; }
+.fp-legend { display: flex; flex-wrap: wrap; gap: 18px; }
+.fp-legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--text-dim); }
+
+.fp-card-head { align-items: flex-start; padding: 18px 20px; }
+.fp-card-title h3 { font-size: 0.95rem; letter-spacing: 1px; color: var(--primary); }
+.fp-card-title h3 i { margin-right: 8px; }
+.fp-card-blurb { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; margin-top: 6px; }
+.fp-share { flex-shrink: 0; text-align: right; min-width: 110px; }
+.fp-share-num { display: block; font-size: 1.3rem; font-weight: 700; color: var(--text-bright); line-height: 1; }
+.fp-share-label { display: block; font-size: 0.65rem; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; margin: 4px 0 6px; }
+.fp-share-bar { height: 3px; background: var(--border); }
+.fp-share-bar > div { height: 100%; background: var(--primary); }
+
+.fp-row { padding: 14px 20px; }
+.fp-label { font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; }
+.fp-value { font-size: 0.95rem; color: var(--text-bright); }
+.fp-note { font-size: 0.78rem; line-height: 1.5; font-style: normal; }
+.fp-badge.fp-info { color: var(--text-dim); border-color: var(--border); }
+
+.fp-tech { margin-top: 6px; }
+.fp-tech summary { cursor: pointer; font-size: 0.72rem; letter-spacing: 1px; color: var(--secondary); user-select: none; }
+.fp-tech code { display: block; margin-top: 6px; padding: 10px; background: #000; color: var(--primary); font-size: 0.75rem; line-height: 1.5; border-left: 3px solid var(--primary); word-break: break-all; }
+
 @media (max-width: 768px) {
     .fp-summary { grid-template-columns: 1fr; padding: 25px 20px; }
     .fp-groups { grid-template-columns: 1fr; }
