@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3469502188782084" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MHWF85ZZ24"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MHWF85ZZ24');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Browser Fingerprint Test - How Unique Is Your Browser? | DorkSearch PRO</title>
+    <meta name="description" content="Free browser fingerprint test. See what canvas, WebGL, audio, fonts and hardware data your browser leaks, get your uniqueness score and learn how to reduce tracking. 100% in your browser.">
+    <meta name="keywords" content="browser fingerprint test, canvas fingerprint, webgl fingerprint, device fingerprinting, browser tracking test, privacy test, am i unique, anti-fingerprinting, WebRTC leak test">
+    <meta name="author" content="DorkSearch PRO">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://dorksearch.pro/fingerprint.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dorksearch.pro/fingerprint.html">
+    <meta property="og:title" content="Browser Fingerprint Test - How Unique Is Your Browser?">
+    <meta property="og:description" content="Find out how trackers can recognize you without cookies. Free, private, runs in your browser.">
+    <meta property="og:image" content="https://dorksearch.pro/og-image.png">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fingerprint.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Browser Fingerprint Test",
+      "description": "Free tool that shows how unique and trackable your browser is.",
+      "url": "https://dorksearch.pro/fingerprint.html",
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+</head>
+<body>
+    <div class="grid-overlay"></div>
+    <div class="particles-bg" id="particles"></div>
+
+    <div class="container">
+        <header>
+            <div class="status-bar">
+                <span class="status-item"><i class="fas fa-circle pulse-green"></i> SYSTEM: ONLINE</span>
+                <span class="status-item">MODE: <span>LOCAL</span></span>
+                <span class="status-item">V.4.0 PROFESSIONAL</span>
+            </div>
+
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="glitch" data-text="DORKSEARCH">DORK<span class="highlight">SEARCH</span></span>
+                    <span class="pro-badge">PRO</span>
+                </h1>
+                <p class="subtitle">
+                    <i class="fas fa-fingerprint"></i> BROWSER FINGERPRINT TEST
+                    <span class="separator">●</span>
+                    <i class="fas fa-user-secret"></i> PRIVACY &amp; TRACKING ANALYSIS
+                </p>
+                <p class="tagline">
+                    <span class="tag-item"><i class="fas fa-lock"></i> 100% Client-Side</span>
+                    <span class="tag-item"><i class="fas fa-bolt"></i> Instant Results</span>
+                    <span class="tag-item"><i class="fas fa-eye-slash"></i> Nothing Stored</span>
+                </p>
+            </div>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> TOOL</a>
+                <a href="meta-extractor.html" class="nav-item"><i class="fas fa-image"></i> EXIF_HUNTER</a>
+                <a href="emoji-crypt.html" class="nav-item"><i class="fas fa-lock"></i> EMOJI_CRYPT</a>
+                <a href="wifi-map.html" class="nav-item"><i class="fas fa-map-marked-alt"></i> WIFI_MAP</a>
+                <a href="fingerprint.html" class="nav-item active"><i class="fas fa-fingerprint"></i> FINGERPRINT</a>
+                <a href="academy/index.html" class="nav-item"><i class="fas fa-graduation-cap"></i> ACADEMY</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="input-section" aria-label="Fingerprint analysis">
+                <div class="section-header">
+                    <div>
+                        <i class="fas fa-fingerprint"></i>
+                        <h3>HOW UNIQUE IS YOUR BROWSER?</h3>
+                    </div>
+                </div>
+                <div class="input-container">
+                    <p>Websites can recognize you without cookies by combining dozens of small details your browser reveals: screen size, fonts, graphics card, time zone, language, and how your device renders images and audio. This test shows exactly what a tracking script can read and estimates how identifiable you are.</p>
+                    <p><strong>Private by design:</strong> the analysis runs entirely in your browser. Nothing is uploaded or stored. The two optional network tests further down contact a third-party server only if you click them.</p>
+                    <div class="button-group">
+                        <button id="fp-run" class="scan-btn primary"><i class="fas fa-bolt"></i><span id="fp-run-text">ANALYZE MY BROWSER</span></button>
+                        <button id="fp-copy" class="scan-btn secondary"><i class="fas fa-copy"></i><span>COPY REPORT</span></button>
+                        <button id="fp-download" class="scan-btn secondary"><i class="fas fa-download"></i><span>DOWNLOAD JSON</span></button>
+                    </div>
+                </div>
+            </section>
+
+            <div id="fp-results" class="hidden">
+                <section id="fp-summary" class="fp-summary">
+                    <div>
+                        <h2 id="fp-verdict-title">ANALYZING...</h2>
+                        <p id="fp-verdict-text"></p>
+                        <div class="fp-meter"><div id="fp-meter-bar"></div></div>
+                        <div class="fp-meter-scale"><span>COMMON</span><span>RARE</span><span>UNIQUE</span></div>
+                        <div id="fp-flags" class="fp-flags"></div>
+                    </div>
+                    <div>
+                        <div class="fp-stat"><span class="k">Estimated identifying information</span><span class="v big"><span id="fp-bits">0</span> bits</span></div>
+                        <div class="fp-stat"><span class="k">You blend in with</span><span class="v" id="fp-odds">-</span></div>
+                        <div class="fp-stat"><span class="k">Fingerprint ID (SHA-256)</span><span class="v" id="fp-id">-</span></div>
+                    </div>
+                </section>
+
+                <div class="ad-container">
+                    <p class="ad-label"><i class="fas fa-ad"></i> SPONSORED_INTELLIGENCE</p>
+                    <script async="async" data-cfasync="false" src="https://pl28558446.profitableratecpmnetwork.com/e81d07d58d502a501a18f60e43a6de72/invoke.js"></script>
+                    <div id="container-e81d07d58d502a501a18f60e43a6de72"></div>
+                </div>
+
+                <section class="info-section">
+                    <h2><i class="fas fa-list"></i> WHAT YOUR BROWSER REVEALS</h2>
+                    <div id="fp-groups" class="fp-groups"></div>
+                </section>
+
+                <section class="info-section">
+                    <h2><i class="fas fa-shield-alt"></i> HOW TO REDUCE YOUR FINGERPRINT</h2>
+                    <div id="fp-recs" class="info-grid"></div>
+                </section>
+            </div>
+
+            <section class="info-section">
+                <h2><i class="fas fa-network-wired"></i> OPTIONAL NETWORK TESTS</h2>
+                <p class="fp-note-top">These tests need to contact an external server, so they only run when you press the button.</p>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="fas fa-globe"></i>
+                            <h3>Public IP lookup</h3>
+                        </div>
+                        <p>Shows the public IP address websites see. Sends a request to api.ipify.org.</p>
+                        <button id="fp-ip-btn" class="scan-btn secondary"><i class="fas fa-search"></i><span>CHECK MY IP</span></button>
+                        <div id="fp-ip-out" class="fp-out"></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="fas fa-satellite-dish"></i>
+                            <h3>WebRTC leak test</h3>
+                        </div>
+                        <p>Checks whether WebRTC exposes your local or public IP to scripts, even behind a VPN. Uses a Google STUN server.</p>
+                        <button id="fp-rtc-btn" class="scan-btn secondary"><i class="fas fa-search"></i><span>RUN WEBRTC TEST</span></button>
+                        <div id="fp-rtc-out" class="fp-out"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-section">
+                <h2><i class="fas fa-book"></i> UNDERSTANDING BROWSER FINGERPRINTING</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="fas fa-question-circle"></i>
+                            <h3>What is it?</h3>
+                        </div>
+                        <p>Browser fingerprinting identifies a device by collecting many technical attributes instead of storing a cookie. Each attribute is common on its own, but the combination is often unique.</p>
+                        <p>Because nothing is saved on your device, clearing cookies or using private mode does not remove it.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="fas fa-microscope"></i>
+                            <h3>What this test measures</h3>
+                        </div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> <strong>Canvas:</strong> pixels produced by your GPU, drivers and fonts</li>
+                            <li><i class="fas fa-check"></i> <strong>WebGL:</strong> graphics card vendor, renderer and limits</li>
+                            <li><i class="fas fa-check"></i> <strong>Audio:</strong> how your audio stack processes a signal</li>
+                            <li><i class="fas fa-check"></i> <strong>Fonts:</strong> which common fonts are installed</li>
+                            <li><i class="fas fa-check"></i> <strong>Hardware &amp; display:</strong> screen, CPU cores, memory, touch</li>
+                            <li><i class="fas fa-check"></i> <strong>Locale &amp; privacy signals:</strong> language, time zone, DNT, GPC</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="fas fa-calculator"></i>
+                            <h3>How the score works</h3>
+                        </div>
+                        <p>Each attribute is assigned an approximate number of bits of identifying information, based on typical values from public fingerprinting research. The bits are added together to estimate how identifiable the combination is.</p>
+                        <p>Treat it as an educational estimate: many attributes are correlated, so the real number is usually lower, and a true population measurement would need a large dataset of visitors.</p>
+                    </div>
+
+                    <div class="info-card highlight">
+                        <div class="info-card-header">
+                            <i class="fas fa-random"></i>
+                            <h3>Randomization detection</h3>
+                        </div>
+                        <p>The test draws the same hidden canvas and audio signal twice. If the results differ, your browser adds random noise, which is how Brave and Firefox's strict protection modes defeat fingerprinting.</p>
+                        <p>Tor Browser takes the opposite approach and makes every user look identical.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <section class="faq-section">
+            <h2><i class="fas fa-question-circle"></i> FREQUENTLY ASKED QUESTIONS</h2>
+            <div class="faq-grid">
+                <details class="faq-item">
+                    <summary><i class="fas fa-chevron-right"></i> Does this test store or send my data?</summary>
+                    <p>No. The analysis runs locally in your browser. Only the optional IP and WebRTC tests make external requests, and only after you click them.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><i class="fas fa-chevron-right"></i> Is browser fingerprinting legal?</summary>
+                    <p>Rules vary by country. In the EU, accessing information on your device for tracking generally requires consent under ePrivacy and GDPR, but enforcement against fingerprinting is uneven.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><i class="fas fa-chevron-right"></i> Will a VPN hide my fingerprint?</summary>
+                    <p>No. A VPN changes your IP address, but the rest of the fingerprint (screen, fonts, GPU, canvas) stays the same.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><i class="fas fa-chevron-right"></i> Why does my fingerprint ID change?</summary>
+                    <p>Updating your browser, changing screen, installing fonts, or enabling a privacy extension changes the attributes and therefore the ID.</p>
+                </details>
+                <details class="faq-item">
+                    <summary><i class="fas fa-chevron-right"></i> How can I become harder to track?</summary>
+                    <p>Use a browser with built-in fingerprint protection (Brave, Firefox with resistFingerprinting, or Tor Browser), keep extensions to a minimum, avoid unusual fonts, and keep the browser updated.</p>
+                </details>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="footer-wave"></div>
+            <div class="footer-container">
+                <div class="footer-section about">
+                    <h3><i class="fas fa-info-circle"></i> ABOUT THE PROJECT</h3>
+                    <p>DorkSearch PRO is an <strong>Open Source</strong> platform dedicated to democratizing <strong>Cybersecurity</strong> and <strong>OSINT</strong> tools.</p>
+                    <p class="quote"><i class="fas fa-quote-left"></i> Knowledge should be free and accessible. Use it responsibly. <i class="fas fa-quote-right"></i></p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">HTML5</span>
+                        <span class="tech-badge">CSS3</span>
+                        <span class="tech-badge">No Frameworks</span>
+                    </div>
+                </div>
+
+                <div class="footer-section links">
+                    <h3><i class="fas fa-link"></i> QUICK LINKS</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Main Tool</a></li>
+                        <li><a href="meta-extractor.html"><i class="fas fa-chevron-right"></i> EXIF Hunter</a></li>
+                        <li><a href="emoji-crypt.html"><i class="fas fa-chevron-right"></i> Emoji Crypt</a></li>
+                        <li><a href="wifi-map.html"><i class="fas fa-chevron-right"></i> WiFi Map</a></li>
+                        <li><a href="fingerprint.html"><i class="fas fa-chevron-right"></i> Fingerprint Test</a></li>
+                        <li><a href="academy/index.html"><i class="fas fa-chevron-right"></i> Academy &amp; Tutorials</a></li>
+                        <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section contact">
+                    <h3><i class="fas fa-envelope"></i> CONTACT</h3>
+                    <p>Need help finding specific information?<br>We offer specialized search services.</p>
+                    <a href="mailto:emploi.contactch@gmail.com" class="contact-btn">
+                        <i class="fas fa-paper-plane"></i> emploi.contactch@gmail.com
+                    </a>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/dorksearch/" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 DorkSearch PRO | Developed with <i class="fas fa-heart pulse"></i> for the Cybersecurity community</p>
+                <p class="disclaimer">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Disclaimer: This tool is for educational and ethical research purposes. Misuse is the user's responsibility.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="fingerprint.js"></script>
+
+    <script>
+        function createComet() {
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            const duration = 4 + Math.random() * 6;
+            comet.style.left = (Math.random() * 100) + '%';
+            comet.style.setProperty('--comet-duration', duration + 's');
+            comet.style.setProperty('--comet-size', (2 + Math.random() * 3) + 'px');
+            comet.style.setProperty('--tail-length', (80 + Math.random() * 150) + 'px');
+            document.body.appendChild(comet);
+            setTimeout(() => comet.remove(), duration * 1000);
+        }
+        function spawnComets() {
+            createComet();
+            setTimeout(spawnComets, 1500 + Math.random() * 3000);
+        }
+        spawnComets();
+    </script>
+</body>
+</html>
