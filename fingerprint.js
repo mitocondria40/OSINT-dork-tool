@@ -315,7 +315,8 @@
     const wrap = $('#fp-groups');
     wrap.textContent = '';
     const groups = [...new Set(data.attrs.map(a => a.group))];
-    groups.forEach(g => {
+    if (window.FPExplain) window.FPExplain.render(wrap, data, totalBits, $('#fp-groups-2'));
+    else groups.forEach(g => {
       const card = el('div', 'fp-card');
       const items = data.attrs.filter(a => a.group === g);
       const gbits = items.reduce((s, a) => s + a.bits, 0);
