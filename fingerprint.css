@@ -1,0 +1,71 @@
+/* DorkSearch PRO - Browser Fingerprint Test
+ * Page-specific styles. Loaded AFTER style.css and built on its variables. */
+
+/* ---------- Summary ---------- */
+.fp-summary {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 30px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    padding: 30px;
+    margin-bottom: 40px;
+}
+.fp-summary.fp-low  { border-left-color: var(--primary); }
+.fp-summary.fp-med  { border-left-color: var(--warning); }
+.fp-summary.fp-high { border-left-color: var(--accent); }
+
+.fp-summary h2 { font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 10px; }
+.fp-summary.fp-low h2  { color: var(--primary); }
+.fp-summary.fp-med h2  { color: var(--warning); }
+.fp-summary.fp-high h2 { color: var(--accent); }
+.fp-summary p { color: var(--text); line-height: 1.8; margin-bottom: 15px; }
+
+.fp-meter { height: 8px; background: var(--bg-darker); border: 1px solid var(--border); margin: 10px 0 6px; }
+.fp-meter > div {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--primary), var(--warning), var(--accent));
+    transition: width 0.8s ease;
+}
+.fp-meter-scale { display: flex; justify-content: space-between; font-size: 0.7rem; letter-spacing: 1px; color: var(--text-dim); }
+
+.fp-stat { margin-bottom: 18px; }
+.fp-stat .k { display: block; font-size: 0.72rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
+.fp-stat .v { display: block; color: var(--secondary); word-break: break-all; }
+.fp-stat .v.big { font-size: 2rem; font-weight: 700; color: var(--text-bright); line-height: 1.1; }
+
+.fp-flags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+.fp-flag { font-size: 0.75rem; padding: 6px 12px; border: 1px solid; }
+.fp-flag.good { color: var(--primary); border-color: rgba(0, 255, 65, 0.3); background: rgba(0, 255, 65, 0.05); }
+.fp-flag.bad  { color: var(--warning); border-color: rgba(255, 204, 0, 0.3); background: rgba(255, 204, 0, 0.04); }
+
+/* ---------- Attribute cards ---------- */
+.fp-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 25px; }
+.fp-card { background: var(--bg-darker); border: 1px solid var(--border); }
+.fp-card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--border); background: rgba(0, 255, 65, 0.03); }
+.fp-card-head h3 { font-size: 0.9rem; letter-spacing: 2px; color: var(--primary); }
+.fp-card-bits { font-size: 0.75rem; color: var(--text-dim); white-space: nowrap; }
+
+.fp-row { display: flex; justify-content: space-between; gap: 15px; padding: 12px 20px; border-bottom: 1px solid var(--border); }
+.fp-row:last-child { border-bottom: 0; }
+.fp-row-main { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.fp-label { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1px; }
+.fp-value { font-size: 0.85rem; color: var(--text); word-break: break-word; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.fp-note { font-size: 0.72rem; color: var(--text-dim); font-style: italic; }
+
+.fp-badge { flex-shrink: 0; align-self: flex-start; font-size: 0.7rem; padding: 3px 8px; border: 1px solid; white-space: nowrap; }
+.fp-badge.fp-low  { color: var(--primary); border-color: rgba(0, 255, 65, 0.3); }
+.fp-badge.fp-med  { color: var(--warning); border-color: rgba(255, 204, 0, 0.35); }
+.fp-badge.fp-high { color: var(--accent);  border-color: rgba(255, 0, 102, 0.4); }
+
+/* ---------- Opt-in tests ---------- */
+.fp-out { margin-top: 15px; font-size: 0.8rem; color: var(--text); word-break: break-word; min-height: 1.2em; }
+.fp-note-top { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px; }
+
+.scan-btn:disabled { opacity: 0.6; cursor: wait; }
+
+@media (max-width: 768px) {
+    .fp-summary { grid-template-columns: 1fr; padding: 25px 20px; }
+    .fp-groups { grid-template-columns: 1fr; }
+}
