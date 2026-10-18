@@ -466,6 +466,5 @@
     $('#fp-download').addEventListener('click', downloadReport);
     $('#fp-ip-btn').addEventListener('click', ipLookup);
     $('#fp-rtc-btn').addEventListener('click', webrtcTest);
-    run();
   });
 })();
